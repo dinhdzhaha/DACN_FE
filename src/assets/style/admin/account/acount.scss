@@ -1,0 +1,265 @@
+.breadcrumb-account {
+  color: #3a3541ab;
+  padding: 15px 10px;
+  &:hover {
+    color: #3a3541ab;
+  }
+}
+.breadcrumb {
+  padding: 15px 10px !important;
+}
+.account {
+  margin-bottom: 50px;
+  &-info {
+    border-radius: 15px;
+    background: #fff;
+    box-shadow: 0px 2px 10px 0px rgba(58, 53, 65, 0.1);
+    padding: 115px 15px 15px 15px;
+    height: max-content;
+    margin-top: 90px;
+  }
+  &-info-photo {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 9px;
+  }
+  &-other-information {
+    padding: 0 15px;
+    width: 57rem;
+  }
+  &-info-name {
+    color: #3a3541de;
+    text-align: center;
+    font-feature-settings: "clig" off, "liga" off;
+    font-family: "Roboto", sans-serif;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 160%;
+    letter-spacing: 0.15px;
+    padding-top: 10px;
+  }
+  &-info-text {
+    color: rgba(58, 53, 65, 0.87);
+    text-align: left;
+    font-feature-settings: "clig" off, "liga" off;
+    font-family: "Roboto", sans-serif;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 160%;
+    letter-spacing: 0.15px;
+  }
+  &-info-gach {
+    width: 300px;
+    height: 1px;
+    background: rgba(58, 53, 65, 0.12);
+  }
+  &-info-personal-information {
+    color: rgba(58, 53, 65, 0.68);
+    font-feature-settings: "clig" off, "liga" off;
+    font-family: "Roboto", sans-serif;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 157%;
+    letter-spacing: 0.1px;
+    strong {
+      color: rgba(58, 53, 65, 0.87);
+    }
+  }
+  &-other-information {
+    padding: 0 15px;
+  }
+  &-other-information-measurements {
+    color: rgba(58, 53, 65, 0.87);
+    font-feature-settings: "clig" off, "liga" off;
+    font-family: "Inter", sans-serif;
+
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 32px;
+    letter-spacing: 0.15px;
+  }
+  &-other-information-group {
+    width: 253px;
+    border-radius: 20px;
+    border: 1px solid #3a3541;
+  }
+  &-other-information-input {
+    width: 73px;
+  }
+  &-other-information-ring-label {
+    width: 170px;
+    height: 54px;
+    padding: 16px 16px 16px 20px;
+  }
+  &-other-information-input {
+    width: 73px;
+    height: 35px;
+    text-align: center;
+    border: none;
+    background: transparent;
+    border-left: 2px solid #3a35414f;
+    color: rgba(58, 53, 65, 0.87);
+    font-family: "Inter", sans-serif;
+
+    font-size: 23px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 24px;
+    letter-spacing: 0.17px;
+    text-transform: uppercase;
+    outline: none;
+  }
+  &-other-information-ring {
+    display: flex;
+    flex-direction: column;
+    gap: 13px;
+  }
+  &-other-information-btn-update {
+    padding: 7px 10px;
+    border: none;
+    outline: none;
+    background: #2684ff;
+    border-radius: 5px;
+    color: #fff;
+    font-family: "Inter", sans-serif;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 24px;
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+  }
+  &-other-information-top {
+    border-radius: 15px;
+  }
+  &-other-information-top {
+    border-radius: 15px;
+  }
+  &-other-information-like {
+    background: #fff;
+    margin-top: 10px;
+    padding: 10px 10px;
+    border-radius: 10px;
+  }
+  &-other-product-sewing-image {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+  }
+  &-other-information-product {
+    background: #fff;
+    border-radius: 10px;
+    padding: 15px 10px;
+    margin-top: 15px;
+  }
+  &-other-information-image {
+    width: 60px;
+    height: 60px;
+  }
+  &-other-information-like-product-shirt-desp {
+    color: #3a3541ad;
+    font-family: "Inter", sans-serif;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 20px;
+    letter-spacing: 0.15px;
+  }
+  &-other-information-colum {
+    width: 1px;
+    height: 70%;
+    background: #ccc;
+    margin: 0 auto;
+  }
+  &-other-information-time {
+    color: #3a354161;
+    font-family: "Inter", sans-serif;
+
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 20px;
+    letter-spacing: 0.15px;
+  }
+}
+.dasheds {
+  border-right: 1px dashed #ccc;
+}
+
+.chung {
+  color: rgba(255, 161, 92, 0.87);
+  font-family: "Inter", sans-serif;
+
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 20px;
+  letter-spacing: 0.15px;
+  padding-left: 25px;
+  margin: 0;
+}
+tr.account-other-information-table-top {
+  background: #F9FAFC;
+}
+th.account-other-information-th {
+  border-right: 3px solid #cccccc;
+}
+td.time {
+  color: rgba(58, 53, 65, 0.87);
+  font-family: "Inter", sans-serif;
+
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 20px;
+  letter-spacing: 0.15px;
+}
+td.price {
+  color: rgba(255, 161, 92, 0.87);
+  font-family: "Inter", sans-serif;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 20px;
+  letter-spacing: 0.15px;
+}
+td.status {
+  color: rgba(32, 223, 127, 0.87);
+  font-family: "Inter", sans-serif;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 20px;
+  letter-spacing: 0.15px;
+}
+button.btn-update {
+  padding: 7px 22px;
+  border: none;
+  outline: none;
+  border-radius: 7px;
+  color: #fff;
+  font-family: "Inter", sans-serif;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 24px;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  background: #309af6;
+}
+.from {
+  height: 31rem;
+}
+.from-top {
+  height: 90%;
+}
+.account-other-information-ring.rings {
+  display: flex;
+  align-items: flex-start;
+  height: 126px;
+}

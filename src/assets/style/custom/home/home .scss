@@ -1,0 +1,71 @@
+.home {
+  &-text {
+    width: 634px;
+    color: #fff;
+    font-family: "Rubik", sans-serif;
+    font-size: 52px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    letter-spacing: 0.52px;
+  }
+  &-vector-img {
+    width: 556px;
+    height: 556px;
+  }
+  &-advantage {
+    padding-top: 150px;
+    &-title {
+      color: #fff;
+      font-family: "Rubik", sans-serif;
+      font-size: 40px;
+      font-style: normal;
+      font-weight: 600;
+      line-height: normal;
+      letter-spacing: 0.4px;
+    }
+    &-content {
+      color: rgba(255, 255, 255, 0.6);
+      text-align: center;
+      font-family: "Rubik", sans-serif;
+      font-size: 18px;
+      font-style: normal;
+      font-weight: 400;
+      line-height: normal;
+      letter-spacing: 0.18px;
+      width: 277.004px;
+      margin: 0 auto;
+    }
+    &-center {
+      gap: 152px;
+    }
+    &-ingredient {
+      padding-top: 61px;
+      &-text-big {
+        color: #fff;
+        text-align: center;
+        font-family: Rubik;
+        font-size: 20px;
+        font-style: normal;
+        font-weight: 600;
+        line-height: normal;
+        letter-spacing: 0.2px;
+        width:146px;
+        margin: 0 auto;
+        padding: 8px 0px;
+      }
+      &-text-small {
+        color: #f7c8e0;
+        text-align: center;
+        font-family: Rubik;
+        font-size: 14px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: normal;
+        letter-spacing: 0.14px;
+        width: 190.935px;
+        margin: 0 auto;
+      }
+    }
+  }
+}

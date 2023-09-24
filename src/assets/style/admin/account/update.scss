@@ -1,0 +1,97 @@
+.update {
+  &-job-information-title {
+    color: rgba(58, 53, 65, 0.87);
+    text-align: left;
+    font-family: "Roboto", sans-serif;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 160%;
+    letter-spacing: 0.15px;
+  }
+  &-sample-left-text {
+    color: rgba(58, 53, 65, 0.87);
+    font-family: "Inter", sans-serif;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 32px;
+    letter-spacing: 0.15px;
+  }
+  &-sample-left-status {
+    color: #000;
+    font-family: "Inter", sans-serif;
+    font-size: 25px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 32px;
+    letter-spacing: 0.15px;
+  }
+  &-sample-left-btn {
+    border-radius: 10px;
+    background: #2684ff;
+    box-shadow: 0px 4px 8px -4px #3a35416b;
+    border: none;
+    outline: none;
+    padding: 7px 23px;
+    color: #fff;
+    text-align: center;
+    font-family: "Inter", sans-serif;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 24px;
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+  }
+  &-note-item {
+    color: #000;
+    font-family: "Inter", sans-serif;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 32px;
+    letter-spacing: 0.15px;
+  }
+}
+.update-note-top-text {
+  color: rgba(58, 53, 65, 0.87);
+  font-family: "Inter", sans-serif;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 32px;
+  letter-spacing: 0.15px;
+}
+.site {
+  border-radius: 10px;
+}
+span.price {
+  color: #ffa15c;
+  font-family: "Roboto", sans-serif;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 157%;
+  letter-spacing: 0.1px;
+}
+span.status {
+  border-radius: 4px;
+  background: #ffecd7;
+  padding: 9px 15px;
+  color: #ff9f38;
+  font-family: "Roboto", sans-serif;
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}
+span.text-span {
+  color: rgba(58, 53, 65, 0.87);
+  font-family: "Inter", sans-serif;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 32px;
+  letter-spacing: 0.15px;
+}

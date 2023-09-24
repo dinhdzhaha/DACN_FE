@@ -1,0 +1,46 @@
+.sidebar {
+  background-color: #fff;
+  height: calc(100vh - 72px);
+  &-menu {
+    display: flex;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    flex-direction: column;
+  }
+  &-nav {
+    padding-top: 50px;
+    padding-left: 25px;
+    position: relative;
+    z-index: 2;
+  }
+  &-link {
+    color: #b6b6b6;
+    font-family: "Roboto", sans-serif;
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    text-decoration: none;
+    display: flex;
+    gap: 15px;
+    padding: 13px 10px;
+    &:hover {
+      color: #6c5dd3;
+    }
+    &:hover svg {
+      color: #6c5dd3;
+    }
+  }
+}
+
+.sidebar-link svg {
+  fill: #b6b6b6;
+}
+.sidebar-link:hover svg {
+  fill: #6c5dd3;
+}
+.active-sidebar {
+  color: #6c5dd3;
+  border-right: 4px solid;
+}

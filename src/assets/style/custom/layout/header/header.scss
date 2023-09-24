@@ -1,0 +1,143 @@
+.header {
+  padding: 25px 50px 25px 110px;
+  &-nav-menu {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    gap: 45px;
+    &-link {
+      text-decoration: none;
+      font-family: "Rubik", sans-serif;
+      font-size: 20px;
+      font-style: normal;
+      font-weight: 500;
+      line-height: normal;
+      letter-spacing: 0.4px;
+    }
+    &-img-bell {
+      width: 40px;
+      height: 40px;
+    }
+  }
+  &-login-link {
+    border-radius: 10px;
+    font-family: "Rubik", sans-serif;
+    background: #f7c8e0;
+    padding: 12px 20px;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    letter-spacing: 0.4px;
+  }
+  &-login-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+  }
+  &-login-avatar-photo {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+  &-login-user-name {
+    color: #000000;
+    font-family: "Rubik", sans-serif;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    letter-spacing: 0.4px;
+  }
+  &-notification {
+    width: 449px;
+    left: -300px;
+    background: #000;
+    top: 50px;
+    border-radius: 25px;
+    padding: 10px 20px;
+    &-title {
+      color: #fff;
+      font-family: "Rubik", sans-serif;
+      font-size: 40px;
+      font-style: normal;
+      font-weight: 700;
+      line-height: normal;
+    }
+    &-all {
+      color: #fff;
+      font-family: "Rubik", sans-serif;
+      font-size: 30px;
+      font-style: normal;
+      font-weight: 600;
+      line-height: normal;
+    }
+    &-unread {
+      color: #fff;
+      font-family: "Rubik", sans-serif;
+      font-size: 30px;
+      font-style: normal;
+      font-weight: 400;
+      line-height: normal;
+    }
+    &-avatars {
+      width: 75px;
+      height: 60px;
+    }
+    &-photo {
+      width: 60px;
+      height: 60px;
+      object-fit: cover;
+      border-radius: 50%;
+    }
+  }
+}
+.header-bell-change {
+  cursor: pointer;
+}
+.tab {
+  cursor: pointer;
+}
+.tab.active {
+  border-bottom: 2px solid #0079ef;
+}
+.tab-content {
+  height: 399px;
+  overflow-y: scroll;
+}
+.notification-active {
+  color: #fff;
+  font-family: "Rubik", sans-serif;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 800;
+  line-height: normal;
+}
+.notification-active-time {
+  color: #0079e9;
+  font-family: "Rubik", sans-serif;
+  font-size: 17px;
+  font-style: normal;
+  font-weight: 800;
+  line-height: normal;
+}
+span.header-bell-number {
+  position: absolute;
+  top: -6px;
+  width: 25px;
+  height: 25px;
+  background: #f00;
+  text-align: center;
+  color: #fff;
+  font-family: Rubik;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 700;
+  border-radius: 50%;
+  line-height: 20px;
+  right: -17px;
+}
+.header-menu {
+  gap: 35px;
+}

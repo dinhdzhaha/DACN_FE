@@ -1,0 +1,71 @@
+.jobs {
+  &-box {
+    background: #fff;
+    padding: 15px 8px 13px 25px;
+    border-radius: 7px;
+  }
+  &-title {
+    color: #000;
+    font-family: Roboto;
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+  }
+  &-top-name {
+    color: #000;
+    font-family: Roboto;
+    font-size: 19px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+  }
+  &-staff {
+    width: 29px;
+    height: 34px;
+    & img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+  &-staff-name {
+    color: #b6b6b6;
+    font-family: Roboto;
+    font-size: 14.397px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    margin: 0;
+    margin-bottom: 9px;
+  }
+  &-status-one {
+    background: #f00;
+    text-align: center;
+    border-radius: 7px;
+    width: 73.958px;
+    height: 25.055px;
+    color: #fff;
+    text-align: center;
+    font-family: Roboto;
+    font-size: 14.397px;
+    font-style: normal;
+    font-weight: 700;
+  }
+}
+.status {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding-left: 20px;
+}
+.work-status {
+  width: 111px;
+  height: 32px;
+  background: #ffecd7;
+  color: #ff9f38;
+  font-family: Roboto;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 32px;
+}

@@ -1,0 +1,23 @@
+.footer {
+  margin-top: 255px;
+  &-center-nav {
+    color: #fff;
+  }
+  &-center-titlte {
+    color: #fff;
+    font-family: Rubik;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+    letter-spacing: 1.17px;
+  }
+  &-center-menu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  &-center {
+    gap: 114px;
+  }
+}
