@@ -3,7 +3,7 @@ import "../../../assets/style/custom/layout/footer/footer.scss";
 import logo from "../../../assets/logo/logo.svg";
 function Footer() {
   return (
-    <div className="container">
+    <footer className="container">
       <div className="footer d-flex justify-content-between ">
         <div className="footer-logo">
           <img src={logo} className="footer-logo-logo" alt="" />
@@ -41,7 +41,7 @@ function Footer() {
           ></iframe>
         </div>
       </div>
-    </div>
+    </footer>
   );
 }
 

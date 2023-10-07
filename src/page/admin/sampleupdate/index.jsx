@@ -1,9 +1,9 @@
 import React from "react";
 
-function Sampleupdate() {
-  return <div className="Sampleupdate">
+function SampleUpdate() {
+  return <div className="SampleUpdate">
     cập nhập nhập data
   </div>;
 }
 
-export default Sampleupdate;
+export default SampleUpdate;

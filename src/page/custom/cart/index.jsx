@@ -1,7 +1,17 @@
 import React from "react";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import carts from "../../../assets/cart/Rectangle7.svg";
 import "../../../assets/style/custom/cart/cart.scss";
 function cart() {
+  const userAuth = JSON.parse(localStorage.getItem("userAuth"));
+  const navigate = useNavigate();
+  useEffect(() => {
+      if (userAuth===null) {
+          navigate("/login");
+          return;
+      }
+  }, []);
   return (
     <div className="cart">
       <table className="cart-table bg-transparent">

@@ -2,8 +2,8 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 import timedot from "../../../assets/icon/TimelineDot.svg";
-import "../../../assets/style/admin/account/acount.scss";
-function Account() {
+import "../../../assets/style/admin/account/account.scss";
+function Accounts() {
   return (
     <div className="account">
       <nav aria-label="breadcrumb">
@@ -364,4 +364,4 @@ function Account() {
   );
 }
 
-export default Account;
+export default Accounts;

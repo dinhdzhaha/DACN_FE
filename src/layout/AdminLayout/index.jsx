@@ -8,8 +8,8 @@ function Admin({ children }) {
     <div className="layout-admin">
       <Header></Header>
       <div className="container-fluid ">
-        <div className="d-felx row">
-          <div className="col-2 p-0">
+        <div className="d-flex row">
+          <div className="col-2 sidebar">
             <Sidebar></Sidebar>
           </div>
           <div className="col-10 p-0">

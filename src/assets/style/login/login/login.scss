@@ -1,0 +1,166 @@
+.loader{
+    height: 30px;
+    width: 30px;
+    margin-left: 10px;
+}
+.login{
+    &-label{
+        margin-top: 30px;
+        text-align: center;
+        font-size: 45px;
+        font-weight: 500;
+        color: #ffffff;
+    }
+
+    &-form-username{
+        margin-top: 30px;
+    }
+    &-username{
+        padding-left: 10px;
+        color: #000000;
+        width: 400px;
+        height: 40px;
+        border-radius: 5px;
+        border: none;
+        background-color: #ffffff;
+    }
+    &-password-form{
+        margin-top: 30px;
+    }
+    &-password{
+        padding-left: 10px;
+        color: #000000;
+        width: 360px;
+        height: 40px;
+        border-radius: 5px 0px 0px 5px;
+        border: none;
+    }
+    &-require{
+        color: red;
+        text-align: left;
+    }
+
+    &-icon-eye
+    {
+        display: flex;
+        justify-content: center; /* Căn giữa theo chiều ngang */
+        align-items: center; /* Căn giữa theo chiều dọc */
+        cursor: pointer;
+        width: 40px;
+        background-color: #ffffff;
+        height: 40px;
+        margin-top: 30px;
+        border-radius: 0px 5px 5px 0px;
+    }
+
+    &-submit{
+        margin-top: 20px;
+        color: #ffffff;
+        width: 400px;
+        height: 40px;
+        border-radius: 5px;
+        border: none;
+        background-color: #20DF7F;
+        font-weight: 600;
+        transition: background-color 0.3s ease;
+        &:hover {
+            background-color: #0a914d;
+        }
+    }
+    &-submit-otp{
+        color: #ffffff;
+        width: 120px;
+        height: 40px;
+        border-radius: 5px;
+        border: none;
+        background-color: #20DF7F;
+        font-weight: 600;
+        margin-left: 15px;
+        &:hover {
+            background-color: #0a914d;
+        }
+    }
+    &-submit-reset{
+        margin-left: 15px;
+        color: #ffffff;
+        width: 180px;
+        height: 40px;
+        border-radius: 5px;
+        border: none;
+        background-color: #20DF7F;
+        float: right;
+        font-weight: 600;
+        &:hover {
+            background-color: #0a914d;
+        }
+    }
+    &-submit-cancel{
+        color: #000000;
+        width: 80px;
+        height: 40px;
+        border-radius: 5px;
+        border: none;
+        float: right;
+        font-weight: 600;
+        &:hover {
+            background-color: #857f7f;
+        }
+    }
+    
+    
+    &-form-submit-reset{
+        margin-top: 30px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    &-form-submit-reset-right{
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        width: 400px;
+        height: 40px;
+    }
+
+    &-reset{
+        margin-top: 15px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    &-reset-link{
+        width: 400px;
+        text-align: right;
+    }
+    &-reset-text
+    {
+        font-size: 18px;
+        font-weight: 500;
+        color: #20DF7F;
+    }
+    &-reset-otp
+    {
+        width: 185px;
+        cursor: pointer;
+    }
+
+    &-information{
+        margin-top: 15px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    &-information-text{
+        font-size: 17px;
+        font-weight: 400;
+        color: #ffffff;
+        width: 400px;
+        text-align: right;
+    }
+
+    .custom-toast {
+        width: 300px; /* Điều chỉnh chiều rộng */
+        height: 100px; /* Điều chỉnh chiều cao */
+        font-size: 16px; /* Điều chỉnh kích thước chữ */
+    }
+}

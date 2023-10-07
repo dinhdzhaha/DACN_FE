@@ -13,10 +13,33 @@
       font-weight: 500;
       line-height: normal;
       letter-spacing: 0.4px;
+      padding: 10px;
+      border-radius: 10px;
+      &-active{
+        text-decoration: none;
+        font-family: "Rubik", sans-serif;
+        font-size: 20px;
+        font-style: normal;
+        font-weight: 500;
+        line-height: normal;
+        letter-spacing: 0.4px;
+        padding: 10px;
+        border-radius: 10px;
+        background-color: rgba(41, 67, 100, 0.2);
+      }
+      &:hover{
+        // .header-nav-menu-item.active {
+        //   background-color: #333; /* Màu nền khi active */
+        //   color: #fff; /* Màu chữ khi active */
+        // }
+        
+        background-color: rgb(193, 196, 200,0.2);/* Màu nền hover */
+      }
     }
     &-img-bell {
       width: 40px;
       height: 40px;
+      
     }
   }
   &-login-link {
@@ -57,10 +80,12 @@
     top: 50px;
     border-radius: 25px;
     padding: 10px 20px;
+    z-index: 10000;
     &-title {
+      padding: 10px 10px 10px 0;
       color: #fff;
       font-family: "Rubik", sans-serif;
-      font-size: 40px;
+      font-size: 22px;
       font-style: normal;
       font-weight: 700;
       line-height: normal;
@@ -68,21 +93,25 @@
     &-all {
       color: #fff;
       font-family: "Rubik", sans-serif;
-      font-size: 30px;
+      font-size: 18px;
       font-style: normal;
       font-weight: 600;
       line-height: normal;
+      border-radius: 10px;
+      padding: 6px 8PX 6px 8px;
     }
     &-unread {
       color: #fff;
       font-family: "Rubik", sans-serif;
-      font-size: 30px;
+      font-size: 18px;
       font-style: normal;
       font-weight: 400;
       line-height: normal;
+      border-radius: 10px;
+      padding: 6px 8px 6px 8px;
     }
     &-avatars {
-      width: 75px;
+      width: 60px;
       height: 60px;
     }
     &-photo {
@@ -91,6 +120,12 @@
       object-fit: cover;
       border-radius: 50%;
     }
+    &-text{
+      font-size: 16px;
+    }
+  }
+  &-cursor{
+    cursor: pointer;
   }
 }
 .header-bell-change {
@@ -99,28 +134,39 @@
 .tab {
   cursor: pointer;
 }
+.tab:hover {
+  background-color: rgba(255, 255, 255, 0.2) !important;
+}
 .tab.active {
-  border-bottom: 2px solid #0079ef;
+  background-color: rgba(29, 133, 243, 0.5)!important;
 }
 .tab-content {
   height: 399px;
-  overflow-y: scroll;
+  overflow-y: auto;
+  &::-webkit-scrollbar {
+    width: 10px; /* Đặt chiều rộng của thanh cuộn */
+    background-color: #fafafa;
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: #007bff; /* Đặt màu sắc cho nút cuộn */
+  }
+  &::-webkit-scrollbar-thumb:hover {
+    background-color: #3e7bbd;
+    opacity: 0.8; /* Đặt màu sắc cho nút cuộn khi di chuột vào */
+  }
+  &::-webkit-scrollbar-thumb:active {
+    background-color: #3e7bbd;
+    opacity: 0.8; /* Đặt màu sắc cho nút cuộn khi bị ấn */
+  }
 }
+
 .notification-active {
   color: #fff;
-  font-family: "Rubik", sans-serif;
-  font-size: 20px;
-  font-style: normal;
   font-weight: 800;
-  line-height: normal;
 }
 .notification-active-time {
   color: #0079e9;
-  font-family: "Rubik", sans-serif;
-  font-size: 17px;
-  font-style: normal;
   font-weight: 800;
-  line-height: normal;
 }
 span.header-bell-number {
   position: absolute;
@@ -140,4 +186,66 @@ span.header-bell-number {
 }
 .header-menu {
   gap: 35px;
+}
+.header-drop{
+  margin-left: -1.5rem;
+}
+
+.dropdown-item{
+  font-size: 25px;
+  font-weight: 500 !important;
+}
+
+.dropdown-item{
+  font-size: 20px;
+  font-weight: 500 !important;
+  color: #fff !important;
+}
+.dropdown-menu{
+  border-radius: 10px !important;
+  width: 280px !important;
+  background-color: #201f1f !important;
+}
+.dropdown-item:focus, .dropdown-item:hover{
+  background-color: #868b91 !important;
+}
+
+.notification-not-active{
+  opacity: 0.6;
+}
+.bordered-item {
+  border-radius: 10px;/* Thiết lập border với màu và kiểu bạn muốn */
+  padding: 10px; /* Thêm khoảng cách đệm cho các mục */
+  /* Các thuộc tính CSS khác tùy chỉnh cho các mục */
+}
+.margin-dropdown{
+  margin-left: 16px;
+}
+
+.width-notification{
+  width: 400px !important;
+  &-content
+  {
+    width: 380px !important;
+    &-text{
+      width: 280px !important;
+      p{
+        white-space: normal !important;
+      }
+    }
+  }
+  
+}
+.dropdown-hover{
+  &:hover{
+    // .header-nav-menu-item.active {
+    //   background-color: #333; /* Màu nền khi active */
+    //   color: #fff; /* Màu chữ khi active */
+    // }
+    border-radius: 10px;
+    background-color: rgb(193, 196, 200,0.2);/* Màu nền hover */
+  }
+}
+.login-hover:hover{
+  background-color: rgb(247, 200, 224, 0.6);
 }

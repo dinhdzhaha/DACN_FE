@@ -1,0 +1,228 @@
+.edit-icon-camera-label {
+    position: relative;
+    display: inline-block;
+}
+
+.edit-icon-camera-container {
+position: absolute;
+bottom: 0;
+right: 0;
+}
+.loader-update{
+    height: 25px;
+    width: 30px;
+}.edit{
+    &-body
+    {
+        border-radius: 15px;
+        box-shadow: 0px 2px 10px 0px rgba(58, 53, 65, 0.1);
+        height: max-content;
+        margin-top: 10px;
+    }
+    &-title{
+        font-size: 20px !important;
+        color: #fff;
+        background-color: #00AC83;
+        width: 300px;
+        height: 35px;
+        display: flex;
+        align-items: center; /* Căn giữa theo chiều dọc */
+        justify-content: center;
+        border-radius: 10px;
+        font-weight: 600;
+        margin-left: 40px;
+    }
+    &-info {
+        display: flex;
+        align-items: center; /* Căn giữa theo chiều dọc */
+        justify-content: center;
+        margin-bottom: 20px;
+    }
+    &-info-photo {
+        width: 130px;
+        height: 130px;
+        object-fit: cover;
+        border-radius: 50%;
+        margin-bottom: 20px;
+    }
+
+    &-icon {
+        width: 130px;
+        text-align: right;
+        margin-top:-25px;
+    }
+
+    &-icon-camera
+    {
+        height: 50px;
+        width: 50px;
+    }
+
+    &-form-name {
+        display: flex;
+        align-items: center; /* Căn giữa theo chiều dọc */
+        justify-content: center;
+    }
+    &-form-first-name
+    {
+        display: block;
+    }
+    &-input{
+        width: 300px;
+        height: 40px;
+        border-radius: 10px;
+        border: 1px solid #00AC83;
+        padding-left: 10px;
+        padding-right: 10px;
+        margin-right: 50px;
+        margin-bottom: 15px;
+    }
+
+    &-label{
+        font-size: 17px;
+        font-weight: 600;
+        color: #000;
+        margin-bottom: 5px;
+    }
+    &-update{
+        display: flex;
+        align-items: center; /* Căn giữa theo chiều dọc */
+        justify-content: center;
+    }
+    &-update-password
+    {
+        font-size: 17px;
+        width: 700px;
+    }
+    &-show-update
+    {
+        cursor: pointer;
+        font-weight: 600;
+        color: #3e3c3c;
+        &:hover{
+            color: #616060;
+        }
+    }
+    &-button-width
+    {
+        width: 700px;
+        text-align: end;
+        margin-bottom: 20px !important;
+    }
+    &-button-save
+    {
+        height: 40px;
+        width: 100px;
+        border-radius: 10px;
+        font-size: 17px;
+        font-weight: 500;
+        background-color: #00AC83;
+    }
+    &-button-cancel
+    {
+        height: 40px;
+        margin-right: 10px;
+        width: 60px;
+        border-radius: 10px;
+        font-size: 17px;
+        font-weight: 500;
+        background-color: rgb(247, 40, 40);
+    }
+    
+}
+.edit-form-address
+{
+    display: block;
+    align-items: center; /* Căn giữa theo chiều dọc */
+    justify-content: center;
+    text-align: center;
+    &-input
+    {
+        width: 650px;
+    }
+    &-label
+    {
+        width: 700px;
+        text-align: left;
+    }
+}
+
+.edit-password
+{
+    display: flex;
+    align-items: center; /* Căn giữa theo chiều dọc */
+    justify-content: center;
+}
+.edit-button
+{
+    display: flex;
+    align-items: center; /* Căn giữa theo chiều dọc */
+    justify-content: center;
+}
+.edit-form-password-confirm{
+    display: block;
+    align-items: center; /* Căn giữa theo chiều dọc */
+    justify-content: center;
+    text-align: center;
+    &-input{
+        width: 650px;
+    }
+    &-label
+    {
+        width: 700px;
+        text-align: left;
+    }
+}
+
+
+.show-other-information{
+    &-title{
+        font-size: 25px;
+        font-weight: 900;
+        margin: 25px 0px 25px 60px;
+    }
+}
+
+.show-other-information-user
+{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    &-group{
+        height: 45px;
+        width: 250px !important;
+        border-radius: 20px;
+        border: 1px solid #3a3541;
+        margin-right: 0px;
+        margin-left: 100px;
+        margin-bottom: 30px;
+        align-items: center; /* Căn giữa theo chiều dọc */
+        justify-content: center;
+        display: flex;
+        background: rgba(255, 255, 255, 0.2);
+    }
+    &-label{
+        padding-left: 10px;
+        font-size: 18px;
+        font-weight: 600;
+        color: #000;
+        margin-bottom: 5px;
+        width: 190px;
+    }
+    &-input{
+        background-color: transparent;
+        width: 60px;
+        padding-left: 15px;
+        border: none;
+        font-size: 18px;
+        font-weight: 600;
+        border-left: 2px solid rgba(58, 53, 65, 0.3098039216);
+    }
+    
+}
+.row-css{
+    margin: 0px !important;
+}
+.row-down{
+    margin-top: 40px !important;
+}

@@ -1,6 +1,9 @@
 .sidebar {
   background-color: #fff;
-  height: calc(100vh - 72px);
+  min-height: 100vh;
+  height: 100%;
+  padding-left: 0!important;
+  padding-right: 0!important;
   &-menu {
     display: flex;
     list-style: none;
