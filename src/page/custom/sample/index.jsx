@@ -1,24 +1,87 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
+import axios from 'axios';
 import "../../../assets/style/custom/sample/sample.scss"
 import Carousel from 'react-grid-carousel'
 
 function SampleProduct()
 {
-    const [sex, setSex]=useState("male")
-    const [type, setType]=useState("Quần tây")
+    const userAuth = JSON.parse(localStorage.getItem("userAuth"));
+    const baseURL = import.meta.env.VITE_API_URL;
+    const [listSamples,setListSamples]=useState([]);
+    const [listSamplesIdLike,setListSamplesIdLike]=useState([]);
+    const [listSampleProduct,setListSampleProduct]=useState([]);
     const [isShowLineMale, setIsShowLineMale]=useState(true);
+    const yourConfig = {
+        headers: {
+        Authorization: "Bearer " + userAuth?.token
+        }
+    };
+    const [category, setCategory]=useState([]);
+    useEffect(() => { 
+        let listLike=null;
+        axios.get(baseURL+`api/UserSample/GetUserSampleByUserQuery?userId=${userAuth.id}`,yourConfig).then((res) => {
+            listLike=res.data;
+            axios.get(baseURL+`api/Sample/GetSamples`,yourConfig).then((res) => {
+                setListSamples(res.data);
+                setListSampleProduct(res.data.filter((item)=>item.isMale==isShowLineMale).map((item, index) => ({
+                    id: item.id,
+                    productCategoryId: item.productCategoryId,
+                    img: item.images,
+                    name: item.name,
+                    price: item.price,
+                    like: listLike.some((itemLike) => itemLike.sampleId === item.id)
+                })));
+                }).catch((err) => {
+                    console.log(err);
+                });
+            setListSamplesIdLike(res.data);
+        }).catch((err) => {
+            console.log(err);
+        });
+
+        axios.get(baseURL+`api/ProductCategory/GetAllProductCategory`,yourConfig).then((res) => {
+            setCategory(res.data);
+            }).catch((err) => {
+                console.log(err);
+            });
+    },[]);
     const [activeIndex, setActiveIndex] = useState(0);
 
     const handleDivClick = (index) => {
         setActiveIndex(index);
+        const productCategoryId= category[index].id;
+        const newSample=listSamples.map((item, index) => ({
+            id: item.id,
+            productCategoryId: item.productCategoryId,
+            img: item.images,
+            name: item.name,
+            price: item.price,
+            like: listSamplesIdLike.some((itemLike) => itemLike.sampleId === item.id)
+        })).filter((item) => item.productCategoryId === productCategoryId);
+        setListSampleProduct(newSample);
     };
     const handleSexMale = () => {
-        setSex("male");
         setIsShowLineMale(true);
+        console.log(listSamples);
+        setListSampleProduct(listSamples.filter((item)=>item.isMale).map((item, index) => ({
+            id: item.id,
+            productCategoryId: item.productCategoryId,
+            img: item.images,
+            name: item.name,
+            price: item.price,
+            like: listSamplesIdLike.some((itemLike) => itemLike.sampleId === item.id)
+        })));
     };
     const handleSexFemale = () => {
-        setSex("female");
         setIsShowLineMale(false);
+        setListSampleProduct(listSamples.filter((item)=>!item.isMale).map((item, index) => ({
+            id: item.id,
+            productCategoryId: item.productCategoryId,
+            img: item.images,
+            name: item.name,
+            price: item.price,
+            like: listSamplesIdLike.some((itemLike) => itemLike.sampleId === item.id)
+        })));
     };
     const MyDot = ({ isActive }) => (
         <span
@@ -32,34 +95,48 @@ function SampleProduct()
         }}
         ></span>
     )
-    const divs = ['Quần tây', 'Áo sơ mi', 'Áo khoác', 'Áo thun'];
-    const [listSampleProduct,set]=useState([{
-        like:true,
-        img:"https://picsum.photos/800/600?random=1",
-        information:"100.000đ"
-    },{
-        like:true,
-        img:"https://picsum.photos/800/600?random=1",
-        information:"100.000đ"
-    },{
-        like:true,
-        img:"https://picsum.photos/800/600?random=1",
-        information:"100.000đ"
-    },{
-        like:false,
-        img:"https://picsum.photos/800/600?random=1",
-        information:"100.000đ"
-    }]);
     const handleIcon=(index)=>{
         const updatedList = [...listSampleProduct];
-  
-  // Cập nhật trạng thái "thích" của phần tử tại chỉ mục index
+
+        // Cập nhật trạng thái "thích" của phần tử tại chỉ mục index
         updatedList[index].like = !updatedList[index].like;
 
         // Sử dụng setListSampleProduct để cập nhật mảng
-        set(updatedList);
+        setListSampleProduct(updatedList);
+        if(updatedList[index].like){
+            const body=
+            {
+                userId: userAuth.id,
+                sampleId: updatedList[index].id
+            }
+            axios.post(baseURL+`api/UserSample/CreateUserSample`,body,yourConfig).then((res) => {
+                axios.get(baseURL+`api/UserSample/GetUserSampleByUserQuery?userId=${userAuth.id}`,yourConfig).then((res) => {
+                    setListSamplesIdLike(res.data);
+                }).catch((err) => {
+                    console.log(err);
+                });
+            }).catch((err) => {
+                console.log(err);
+            });
+        }
+        else{
+            const idDelete=listSamplesIdLike.find((item) => item.sampleId === updatedList[index].id).id;
+            const config={
+                headers: {
+                Authorization: "Bearer " + userAuth?.token
+                },
+                data: {
+                    "id": idDelete
+                }
+            };
+            axios.delete(baseURL+`api/UserSample/DeleteUserSample`,config).then((res) => {
+                let updateListSampleIdLike=listSamplesIdLike.filter((item) => item.sampleId !== idDelete);
+                console.log(res);
+            }).catch((err) => {
+                console.log(err);
+            });
+        }
     };
-    console.log(listSampleProduct);
     return (
         <div className='sample'>
             <div className='sample-type'>
@@ -74,13 +151,13 @@ function SampleProduct()
                     </div>
                 </div>
                 <div className='sample-type-clothe text-center'>
-                {divs.map((content, index) => (
+                {category.map((content, index) => (
                         <div
                         key={index}
                         className={`sample-type-clothe-label text-center ${activeIndex === index ? 'active-index' : ''}`}
                         onClick={() => handleDivClick(index)}
                         >
-                            {content}
+                            {content.name}
                         </div>
                         )
                     )
@@ -89,46 +166,27 @@ function SampleProduct()
             </div>
             <div className='sample-product'>
                 <div className="container sample-product-container text-center">
-                    {/* <div className='sample-product-icon-left'>
-                        <img className='sample-product-icon' src={leftIcon} alt="left-icon"/>
-                    </div>
-                    <div className="row">
-                        <div className="col sample-product-product">
-                            <div className='sample-product-icon'></div>                        
-                            <div className='sample-product-img'></div>                        
-                            <div className='sample-product-img'></div>                        
-                        </div>
-                        <div className="col sample-product-product">
-                        Col sample-product-productumn
-                        </div>
-                        <div className="col sample-product-product">
-                        Col sample-product-productumn
-                        </div>
-                        <div className="col sample-product-product">
-                        Col sample-product-productumn
-                        </div>
-                    </div>
-                    <div className='sample-product-icon-right'>
-                        <img className='sample-product-icon' src={rightIcon} alt="right-icon"/>
-                    </div> */}
-                    <Carousel cols={4} rows={1} gap={50} loop dot={MyDot} dotColorActive="true" showDots>
+                    {
+                    listSampleProduct.length>0?<Carousel cols={4} rows={1} gap={20} loop dot={MyDot} dotColorActive="true" showDots>
                         { listSampleProduct.map((item, index) => (
                             <Carousel.Item key={index}>
                                 <div className="col sample-product-product text-center">
                                     <div className='sample-product-icon'>
-                                        <i className="fas fa-heart heart-icon" id={`${item.like ? "like-index" : ""}`} onClick={()=>{handleIcon(index)}}></i>
+                                        <i className="fas fa-heart heart-icon" id={`${item?.like ? "like-index" : ""}`} onClick={()=>{handleIcon(index)}}></i>
                                         <span className="like-text">{item.like?"Bỏ thích":"Thích"}</span>
                                     </div>                        
                                     <div className='sample-product-img'>
-                                        <img className='sample-product-img-img' src={item.img} alt="sample-product-img"/>
+                                        <img className='sample-product-img-img' src={item?.img} alt="sample-product-img"/>
                                     </div>                        
-                                    <div className='sample-product-information'>{item.information}</div>                        
+                                    <div className='sample-product-name'>{item?.name}</div>                        
+                                    <div className='sample-product-information'>{item?.price.toLocaleString('vi-VN')} đ</div>                        
                                 </div>
                             </Carousel.Item>
                         ))
                         }
                         
                     </Carousel>
+                    :<div className="sample-product-no-product">Không có sản phẩm nào</div>}
                 </div>
             </div>
         </div>

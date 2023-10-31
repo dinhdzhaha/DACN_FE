@@ -11,7 +11,6 @@ import "react-toastify/dist/ReactToastify.css";
 
 
 function Layout() {
-  console.log("cc3")
   return (
     <div className="main">
       {/* <React.StrictMode> */}

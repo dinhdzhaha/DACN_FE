@@ -1,7 +1,47 @@
-p{
-    margin-bottom: 0 !important;
+.table-user{
+    margin:15px;
 }
-.css-table{
-    margin-top: 15px;
-    margin-left: 15px;
+.row-scss{
+    cursor: pointer;    
+}
+.table-action
+{
+    display: flex;
+    margin-left: 10px;
+    margin-bottom: 10px;
+    &-icon{
+        margin-right: 8px;
+    }
+    &-update
+    {
+        text-align: center;
+        justify-items: center;
+        padding: 5px 10px;
+        border-radius: 10px;
+        border: 1.5px solid #ffffff;
+        background-color: #ffffff;
+        &:hover
+        {
+            background-color: rgb(255, 255, 255, 0.5);
+        }
+        cursor: pointer;
+    }
+    &-remove
+    {
+        text-align: center;
+        justify-items: center;
+        padding: 5px 10px;
+        border-radius: 10px;
+        margin-left: 10px;
+        background-color: #ffffff;
+        border: 1.5px solid #ffffff;
+         /* Default text color */
+        transition: color 0.3s; /* Transition effects on hover (color) */
+        &:hover
+        {
+            background-color: rgb(255,255,255,0.5);
+
+        }
+        cursor: pointer;
+    }
 }

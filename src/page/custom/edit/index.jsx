@@ -117,9 +117,6 @@ function Edit() {
         axios.put(baseURL+`api/Users/UpdatePasswordForUser`,bodyParameters,config).then((res) => {
             setUseData(res.data);
             
-            console.log("USdATA:" + useData);
-            console.log("USsTATEdATA:" + useStateData);
-            console.log(res.data);
             setLoad(false);
             setDisable(true);
             showToastMessageSuccess("Cập nhật thành công!");
@@ -155,7 +152,6 @@ function Edit() {
             });
             setUseStateData(res.data);
             setUseData(res.data);
-            console.log(res.data);
         }).catch((err) => {
             console.log(err);
         });
@@ -173,7 +169,6 @@ function Edit() {
     reader.onload = (e) => {
         const base64String = e.target.result;
         // Ở đây, bạn có thể sử dụng base64String cho mục đích của mình
-        console.log(base64String);
     };
     
     reader.readAsDataURL(file);
@@ -186,24 +181,24 @@ function Edit() {
         <div className="edit-body">
             <div className="edit-info text-center">
                 <div className="edit-info-avatar text-center">
-                <label htmlFor="imageInput" className="edit-icon-camera-label">
-                    <img
-                    src={useData?.avatar}
-                    className="edit-info-photo"
-                    alt=""
+                    <label htmlFor="imageInput" className="edit-icon-camera-label">
+                        <img
+                        src={useData?.avatar}
+                        className="edit-info-photo"
+                        alt=""
+                        />
+                        <div className="edit-icon-camera-container">
+                            <img className="edit-icon-camera" src={camera} alt="" />
+                        </div>
+                    </label>
+                    <input
+                        type="file"
+                        accept="image/*"
+                        id="imageInput"
+                        className="edit-icon-camera-input"
+                        onChange={handleImageUpload}
+                        hidden
                     />
-                    <div className="edit-icon-camera-container">
-                        <img className="edit-icon-camera" src={camera} alt="" />
-                    </div>
-                </label>
-                <input
-                    type="file"
-                    accept="image/*"
-                    id="imageInput"
-                    className="edit-icon-camera-input"
-                    onChange={handleImageUpload}
-                    hidden
-                />
                 </div>
             </div>
             <div className="edit-form">

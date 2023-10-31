@@ -45,7 +45,7 @@ function Login() {
     axios
       .get(baseURL + `api/Users/Auth?userName=${userName}&pwd=${password}`)
       .then((response) => {
-        login(response.data.token, response.data.id);
+        login(response.data);
         setLoad(false);
         showToastMessageSuccess("Đăng nhập thành công!");
         navigate("/");

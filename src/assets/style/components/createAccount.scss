@@ -1,0 +1,85 @@
+.model-names {
+    color: #000;
+    font-family: "Roboto", sans-serif;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 160%;
+    letter-spacing: 0.15px;
+  }
+  .upload-load {
+    background: #6c5dd3;
+    width: 100px;
+    text-align: center;
+    height: 31px;
+    line-height: 31px;
+    border-radius: 5px;
+    font-family: "Roboto", sans-serif;
+    color: #ffff;
+    cursor: pointer;
+  }
+  .warehouse-model-updaload {
+    width: 150px;
+    height: 150px;
+  }
+  .closes {
+    border: none;
+    outline: none;
+    background: transparent;
+    top: -12px;
+  }
+  .modal-content{
+    top:32px;
+  }
+  .warehouse-model-input::placeholder
+  {
+    color: rgb(0, 0, 0, 0.4);
+  }
+  .width-label
+  {
+    width: 85px !important;
+  }
+  .warehouse-model-btn
+  {
+    &:hover
+    {
+      background: #6c5dd3;
+    }
+  }
+  
+  .warehouse-content-top-dot{
+    margin-top: -20px;
+    width: 20px !important;
+    height: 15px !important;
+  }
+
+  .change-width
+  {
+    height:150px !important;
+  }
+  .width-modal
+  {
+    width: 550px !important;
+  }
+
+  .scss-name
+  {
+    font-size: 16px !important;
+  }
+  .width-line
+  {
+    width: 100% !important;
+    margin-bottom: 10px !important;
+  }
+  .margin-name{
+    margin-top: 10px !important;
+    margin-bottom: 10px !important;
+  }
+  .width-label-1
+  {
+    width: 120px !important;
+  }
+  .width-auto
+  {
+    width: auto !important;
+  }

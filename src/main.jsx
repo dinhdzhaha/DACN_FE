@@ -6,5 +6,4 @@ import "bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 ReactDOM.createRoot(document.getElementById("root")).render(
             <App />
-      
 );

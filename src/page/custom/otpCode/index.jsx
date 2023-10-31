@@ -10,7 +10,6 @@ function OTPCode() {
     const [optCode, setOptCode] = useState('');
     const navigate=useNavigate();
     useEffect(() => {
-        console.log(userName);
         if(!userName) {
             navigate('/resetPassword');
         }
@@ -26,7 +25,6 @@ function OTPCode() {
         }
         else setIsShowRequireOtp(false);
         const baseURL = import.meta.env.VITE_API_URL;
-        console.log(typeof userName);
         const user = {
             userName: userName,
             otpCode: optCode
@@ -34,8 +32,6 @@ function OTPCode() {
     
         axios.get(baseURL+`api/Users/CheckOTP/?oTP=${optCode}&userName=${userName}`)
         .then(res => {
-            console.log(res);
-            console.log(res.data);
             if(res.data === true) {
                 localStorage.setItem('otpCode', optCode);
                 navigate('newPassword');
@@ -75,15 +71,12 @@ function OTPCode() {
     const sendOTPToMail = () => {
         const baseURL = import.meta.env.VITE_API_URL;
         const userName= localStorage.getItem("userName");
-        console.log(userName);
         const user = {
             userName: userName
         };
     
         axios.put(baseURL+"api/Users/SendOTPToMail", user)
         .then(res => {
-            console.log(res);
-            console.log(res.data);
             showToastMessageSuccess("Mã OTP đã được gửi tới email của bạn");
         })
         .catch(err => {

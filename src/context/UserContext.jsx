@@ -3,10 +3,11 @@ import axios from "axios";
 
 const UserContext = createContext();
 const UserProvider = ({ children }) => {
-    const login = (token,id) => {
+    const login = (auth) => {
         localStorage.setItem("userAuth", JSON.stringify({
-            token: token,
-            id: id,
+            token: auth.token,
+            id: auth.id,
+            isAdmin: auth.isAdmin,
             auth: true,
         }));
     };

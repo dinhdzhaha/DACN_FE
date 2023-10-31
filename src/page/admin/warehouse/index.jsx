@@ -1,103 +1,146 @@
-import React, { useState } from "react";
-
+import React, { useState,useEffect } from "react";
+import axios from "axios";
 import "../../../assets/style/admin/warehouse/warehouse.scss";
 import icondot from "../../../assets/icon/icondot.svg";
+import Dropdown from 'react-bootstrap/Dropdown';
+import { showToastMessageError,showToastMessageSuccess } from "../../../components/toast";
+import UpdateInventory from "../../../components/updateInventory";
+import Popup from "reactjs-popup";
+
 function Warehouse() {
-  const [value, setValue] = useState(0);
-  const [values, setValues] = useState(0);
-  const increaseValue = () => {
-    setValue(value + 1);
-  };
-
-  const reduceValue = () => {
-    if (value > 0) {
-      setValue(value - 1);
+  const userAuth = JSON.parse(localStorage.getItem("userAuth"));
+  const baseURL = import.meta.env.VITE_API_URL;
+  const yourConfig = {
+    headers: {
+      Authorization: "Bearer " + userAuth?.token
     }
   };
-  const increaseValues = () => {
-    setValues(values + 1);
+  const [selection,setSelection]=useState(0);
+  const [category,setCategory] =useState([{}]);
+  const [dataInventory,setDataInventory] = useState([{}]);
+  const [dataInventoryInit,setDataInventoryInit] = useState([{}]);
+  useEffect(() => { 
+    axios.get(baseURL+`api/InventoryCategory/GetAllInventoryCategory`,yourConfig).then((res) => {
+      setCategory(res.data);
+    }).catch((err) => {
+      console.log(err);
+    });
+
+    axios.get(baseURL+`api/Inventory/GetAllInventory`,yourConfig).then((res) => {
+      setDataInventoryInit(JSON.parse(JSON.stringify(res.data)));
+      setDataInventory(res.data);
+    }).catch((err) => {
+      console.log(err);
+    });
+  },[]);
+  const [isUpdates,setIsUpdate]= useState([]);
+  const handleTime=(time)=>{
+    const originalDate = new Date(time);
+    const options = {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+    };
+
+    const localDate = originalDate.toLocaleString('vi-VN', options);
+    return localDate;
+  };
+  console.log('handleCance');
+
+  const handleCancel=(item)=>{
+    setIsUpdate((isUpdates)=>{
+      return isUpdates.filter(c=>c!=item.id);
+    });
+    console.log('handleCance');
+    setDataInventory((dataInventory)=>{
+      const index=dataInventory.findIndex(c=>c.id==item.id);
+      console.log(dataInventoryInit[index]);
+      console.log(dataInventory[index]);
+      const data=dataInventory;
+      data[index].total=dataInventoryInit[index].total;
+      data[index].used=dataInventoryInit[index].used;
+      return data;
+    });
+    console.log('handleCance');
+
+  };
+  const handleSubmit=(id)=>{
+    const body=dataInventory.filter(c=>c.id==id);
+    const bodyParam={
+      "id": body[0].id,
+      "inventoryCategoryId": body[0].inventoryCategoryId,
+      "name": body[0].name,
+      "describe": body[0].describe,
+      "images": body[0].images,
+      "price": body[0].price,
+      "total": body[0].total,
+      "used": body[0].used,
+    };
+    axios.put(baseURL+`api/Inventory/UpdateInventory`,bodyParam,yourConfig).then((res) => {
+      setIsUpdate((isUpdates)=>{
+        return isUpdates.filter(c=>c!=id);
+      });
+      const index=dataInventory.findIndex(c=>c.id==id);
+      setDataInventoryInit((dataInventoryInit)=>[
+        ...dataInventoryInit.slice(0, index), // Copy elements before the index
+        JSON.parse(JSON.stringify(res.data)), // Add the new item
+        ...dataInventoryInit.slice(index+1)]);
+      setDataInventory((dataInventory)=>[
+        ...dataInventory.slice(0, index), // Copy elements before the index
+        res.data, // Add the new item
+        ...dataInventory.slice(index+1) // Copy elements after the index
+      ]);
+      showToastMessageSuccess("Cập nhật thành công!");
+    }).catch((err) => {console.error(err);showToastMessageError(err.response.data.detail);});
+  };
+  const handleDelete=(id)=>{
+    axios.delete(baseURL+`api/Inventory/DeleteInventory?id=${id}`,yourConfig).then((res) => {
+      setDataInventory((dataInventory)=>{
+        return dataInventory.filter(c=>c.id!=id);
+      });
+      setDataInventoryInit((dataInventory)=>{
+        return dataInventory.filter(c=>c.id!=id);
+      });
+      showToastMessageSuccess("Xóa thành công!");
+    }).catch((err) => {console.error(err);showToastMessageError(err.response.data.detail);});
+  };
+  const [selectedObject, setSelectedObject] = useState(null);
+
+  const openModal = (object) => {
+    setSelectedObject(object);
   };
 
-  const reduceValues = () => {
-    if (values > 0) {
-      setValues(values - 1);
-    }
+  const closeModal = () => {
+    setSelectedObject(null);
   };
   return (
     <div className="warehouse">
+      {selectedObject && (
+        <UpdateInventory data={selectedObject} onClose={closeModal}></UpdateInventory>
+      )}
       <div className="warehouse-select">
-        <ul className="nav nav-pills gap-3" id="pills-tab" role="tablist">
-          <li className="nav-item" role="presentation">
+      <ul className="nav nav-pills" id="pills-tab" role="tablist">
+          <li li className="nav-item" someAttribute={true} >
             <button
-              className="nav-link active warehouse-text"
-              id="pills-home-tab"
-              data-bs-toggle="pill"
-              data-bs-target="#pills-home"
-              type="button"
-              role="tab"
-              aria-controls="pills-home"
-              aria-selected="true"
+              className={selection==0?"nav-link active warehouse-text selected":"nav-link active warehouse-text"}
+              onClick={()=>{setSelection(0);setDataInventory(dataInventoryInit);}}
             >
               Tất cả
             </button>
           </li>
-          <li className="nav-item" role="presentation">
+        {category.map((item, index) => (
+          <li className="nav-item" key={index} someAttribute={true}>
             <button
-              className="nav-link warehouse-text"
-              id="pills-profile-tab"
-              data-bs-toggle="pill"
-              data-bs-target="#pills-profile"
-              type="button"
-              role="tab"
-              aria-controls="pills-profile"
-              aria-selected="false"
+              className={selection==item.id?"nav-link active warehouse-text selected":"nav-link active warehouse-text"}
+              onClick={()=>{setSelection(item.id);setDataInventory(dataInventoryInit.filter(c=>c.inventoryCategoryId==item.id));}}
             >
-              Chỉ
+              {item.name}
             </button>
           </li>
-          <li className="nav-item" role="presentation">
-            <button
-              className="nav-link warehouse-text"
-              id="pills-contact-tab"
-              data-bs-toggle="pill"
-              data-bs-target="#pills-contact"
-              type="button"
-              role="tab"
-              aria-controls="pills-contact"
-              aria-selected="false"
-            >
-              Vải
-            </button>
-          </li>
-          <li className="nav-item" role="presentation">
-            <button
-              className="nav-link warehouse-text"
-              id="pills-knot-tab"
-              data-bs-toggle="pill"
-              data-bs-target="#pills-knot"
-              type="button"
-              role="tab"
-              aria-controls="pills-knot"
-              aria-selected="false"
-            >
-              Nút
-            </button>
-          </li>
-          <li className="nav-item" role="presentation">
-            <button
-              className="nav-link warehouse-text"
-              id="pills-zipper-tab"
-              data-bs-toggle="pill"
-              data-bs-target="#pills-zipper"
-              type="button"
-              role="tab"
-              aria-controls="pills-zipper"
-              aria-selected="false"
-            >
-              Dây kéo
-            </button>
-          </li>
-        </ul>
+        ))}
+      </ul>
       </div>
       <div className="warehouse-content">
         <div className="tab-content h-100 overflow-auto" id="pills-tabContent">
@@ -109,855 +152,179 @@ function Warehouse() {
             tabIndex="0"
           >
             <div className="d-flex flex-wrap gap-2">
-              <div className="warehouse-content-box bg-white">
+              {
+                dataInventory.map((item,index)=>(
+                <div className="warehouse-content-box bg-white" key={index}>
                 <div className="warehouse-content-top d-flex  justify-content-between">
                   <div className="warehouse-content-top-left">
-                    <h2 className="warehouse-content-top-name">Nút sơ mi</h2>
-                    <p className="warehouse-content-top-price">2.000đ</p>
+                    <h2 className="warehouse-content-top-name">{item.name}</h2>
+                    <p className="warehouse-content-top-price">Đơn giá:  {item.price?.toLocaleString('vi-VN')}đ</p>
                     <div className="warehouse-content-top-quantity">
-                      <div className="d-flex justify-content-between">
-                        <div className="warehouse-content-top-group d-flex justify-content-between align-items-center">
-                          <div>
-                            <label className="warehouse-content-top-used">
-                              Đã sử dụng
+                      <div className="warehouse-content-top-group-total d-flex justify-content-between align-items-center ">
+                        <div>
+                            <label className="warehouse-content-top-total">
+                              Tổng:
                             </label>
                             <input
                               type="number"
-                              id="warehouse-content-top-useds"
-                              className="warehouse-content-top-number"
-                              value={value}
-                              onChange={(e) => setValue(e.target.value)}
+                              id="warehouse-content-top-total"
+                              className="warehouse-content-top-number total"
+                              value={item.total}
+                              onChange={(e)=>{
+                                setIsUpdate((isUpdates)=>
+                                {
+                                  if(!isUpdates.includes(item.id))
+                                    return ([...isUpdates,item.id])
+                                  else return isUpdates;
+                                });
+                                setDataInventory((dataInventory)=>{
+                                  const index=dataInventory.findIndex(c=>c.id==item.id);
+                                  const number=e.target.value;
+                                  dataInventory[index].total=number;
+                                  return [...dataInventory];
+                                });}}
                             />
                           </div>
                           <div className="d-flex flex-column ">
-                            <button
-                              className="warehouse-content-top-increase"
-                              onClick={increaseValue}
-                            >
-                              <i className="fa-solid fa-chevron-up"></i>
-                            </button>
-                            <button
-                              className="warehouse-content-top-reduce"
-                              onClick={reduceValue}
-                            >
-                              <i className="fa-solid fa-chevron-down"></i>
-                            </button>
+                              <i className="fa-solid fa-chevron-up width-icon" onClick={()=>{
+                                setIsUpdate((isUpdates)=>
+                                {
+                                  if(!isUpdates.includes(item.id))
+                                    return ([...isUpdates,item.id])
+                                  else return isUpdates;
+                                });
+                                setDataInventory((dataInventory)=>{
+                                  const index=dataInventory.findIndex(c=>c.id==item.id);
+                                  const number=dataInventory[index].total+1;
+                                  dataInventory[index].total=number;
+                                  return [...dataInventory];
+                                });}}></i>
+                              <i className="fa-solid fa-chevron-down width-icon" ></i>
                           </div>
                         </div>
-                        <div className="warehouse-content-top-group-total d-flex justify-content-between align-items-center ">
-                          <label className="warehouse-content-top-total">
-                            Tổng
+                        <div className="warehouse-content-top-group d-flex justify-content-between align-items-center">
+                          <div>
+                            <label className="warehouse-content-top-used">
+                              Đã sử dụng:
+                            </label>
+                            <input
+                              type="number"
+                              id="warehouse-content-top-used"
+                              className="warehouse-content-top-number"
+                              value={item.used}
+                              onChange={(e)=>{
+                                setIsUpdate((isUpdates)=>
+                                {
+                                  if(!isUpdates.includes(item.id))
+                                    return ([...isUpdates,item.id])
+                                  else return isUpdates;
+                                });
+                                setDataInventory((dataInventory)=>{
+                                  const index=dataInventory.findIndex(c=>c.id==item.id);
+                                  const number=e.target.value;
+                                  if(number>item.total)
+                                  {
+                                    alert("Số lượng đã sử dụng không được lớn hơn số lượng tổng");
+                                    return [...dataInventory];
+                                  }
+                                  dataInventory[index].used=number;
+                                  return [...dataInventory];
+                                });}}
+                            />
+                          </div>
+                          <div className="d-flex flex-column ">
+                              <i className="fa-solid fa-chevron-up width-icon" onClick={()=>{
+                                setIsUpdate((isUpdates)=>
+                                {
+                                  if(!isUpdates.includes(item.id))
+                                    return ([...isUpdates,item.id])
+                                  else return isUpdates;
+                                });
+                                setDataInventory((dataInventory)=>{
+                                  const index=dataInventory.findIndex(c=>c.id==item.id);
+                                  const number=dataInventory[index].used+1;
+                                  if(number>item.total)
+                                  {
+                                    alert("Số lượng đã sử dụng không được lớn hơn số lượng tồn kho");
+                                    return [...dataInventory];
+                                  }
+                                  dataInventory[index].used=number;
+                                  return [...dataInventory];
+                                });}}></i>
+                              <i className="fa-solid fa-chevron-down width-icon" onClick={()=>{
+                                setIsUpdate((isUpdates)=>
+                                {
+                                  if(!isUpdates.includes(item.id))
+                                    return ([...isUpdates,item.id])
+                                  else return isUpdates;
+                                });
+                                setDataInventory((dataInventory)=>{
+                                  const index=dataInventory.findIndex(c=>c.id==item.id);
+                                  const number=dataInventory[index].used-1;
+                                  if(number>=0)
+                                  {
+                                    if(number>item.total)
+                                    {
+                                      alert("Số lượng đã sử dụng không được lớn hơn số lượng tổng");
+                                      return [...dataInventory];
+                                    }
+                                    dataInventory[index].used=number;
+                                  }
+                                  return [...dataInventory];
+                                });}}></i>
+                          </div>
+                        </div>
+                        <div className="warehouse-content-top-group-remaining">
+                          <label className="warehouse-content-top-remaining-id">
+                            Còn lại:
                           </label>
                           <input
                             type="number"
-                            id="warehouse-content-top-total"
-                            className="warehouse-content-top-number total"
-                            value={values}
+                            id="warehouse-content-top-remaining-id"
+                            className="warehouse-content-top-remaining-input warehouse-content-top-number text-white"
+                            value={item?.total - item?.used}
+                            readOnly
+                            defaultValue={0}
                           />
-                          <div className="d-flex flex-column ">
-                            <button
-                              className="warehouse-content-top-increase"
-                              onClick={increaseValues}
-                            >
-                              <i className="fa-solid fa-chevron-up"></i>
-                            </button>
-                            <button
-                              className="warehouse-content-top-reduce"
-                              onClick={reduceValues}
-                            >
-                              <i className="fa-solid fa-chevron-down"></i>
-                            </button>
-                          </div>
                         </div>
-                      </div>
-
-                      <div className="warehouse-content-top-group-remaining">
-                        <label className="warehouse-content-top-remaining-id">
-                          Còn lại
-                        </label>
-                        <input
-                          type="number"
-                          id="warehouse-content-top-remaining-id"
-                          className="warehouse-content-top-remaining-input warehouse-content-top-number text-white"
-                          value={5}
-                          readOnly
-                        />
-                      </div>
                     </div>
                   </div>
                   <div className="warehouse-content-top-center">
                     <img
-                      src="https://i.pinimg.com/564x/10/ee/98/10ee98130fcb4261135dce02f701518a.jpg"
+                      src={item.images}
                       alt=""
                       className="warehouse-content-top-center-image"
                     />
                   </div>
-                  <div
-                    className="warehouse-content-top-dot"
-                    data-bs-toggle="modal"
-                    data-bs-target="#exampleModal"
-                  >
-                    <img src={icondot} alt="" />
-                  </div>
+                  <Dropdown className="dropdown-hover-update-inventory">
+                    <Dropdown.Toggle variant="null"  bsPrefix="header-login">
+                        <div className="icon-update">
+                              <img src={icondot} alt="" className="warehouse-content-top-dot" />
+                        </div>
+                    </Dropdown.Toggle>
+                    <Dropdown.Menu className="drop-width">
+                      <Dropdown.Item className="bordered-item-warehouse">
+                          <Popup modal trigger={<button>Cập nhật khác</button>}>
+                        {close => <UpdateInventory close={close} />}
+                      </Popup></Dropdown.Item>
+                      <Dropdown.Item  className="bordered-item-warehouse" onClick={()=>handleDelete(item.id)}>Xóa</Dropdown.Item>
+                    </Dropdown.Menu>
+                  </Dropdown>
                 </div>
-                <div className="warehouse-content-bottom">
-                  Thời gian cập nhật gần nhất 14:30, 05 tháng 05, 2023
+                <div className="d-flex flex-row">
+                  <div className="warehouse-content-bottom">
+                    Thời gian cập nhật gần nhất {item.updatedAt!=null?handleTime(item.updatedDate):handleTime(item.createdDate)}
+                  </div>
+                  <button className="btn-cancel-admin" hidden={!isUpdates.includes(item.id)} onClick={()=>handleCancel(item)}>
+                    Hủy
+                  </button>
+                  <button  hidden={!isUpdates.includes(item.id)} className={"btn-update-admin" } onClick={()=>handleSubmit(item.id)}>
+                    Cập nhật
+                  </button>
                 </div>
               </div>
-              <div className="warehouse-content-box bg-white">
-                <div className="warehouse-content-top d-flex  justify-content-between">
-                  <div className="warehouse-content-top-left">
-                    <h2 className="warehouse-content-top-name">Nút sơ mi</h2>
-                    <p className="warehouse-content-top-price">2.000đ</p>
-                    <div className="warehouse-content-top-quantity">
-                      <div className="d-flex justify-content-between">
-                        <div className="warehouse-content-top-group d-flex justify-content-between align-items-center">
-                          <div>
-                            <label className="warehouse-content-top-used">
-                              Đã sử dụng
-                            </label>
-                            <input
-                              type="number"
-                              id="warehouse-content-top-useds"
-                              className="warehouse-content-top-number"
-                              value={value}
-                              onChange={(e) => setValue(e.target.value)}
-                            />
-                          </div>
-                          <div className="d-flex flex-column ">
-                            <button
-                              className="warehouse-content-top-increase"
-                              onClick={increaseValue}
-                            >
-                              <i className="fa-solid fa-chevron-up"></i>
-                            </button>
-                            <button
-                              className="warehouse-content-top-reduce"
-                              onClick={reduceValue}
-                            >
-                              <i className="fa-solid fa-chevron-down"></i>
-                            </button>
-                          </div>
-                        </div>
-                        <div className="warehouse-content-top-group-total d-flex justify-content-between align-items-center ">
-                          <label className="warehouse-content-top-total">
-                            Tổng
-                          </label>
-                          <input
-                            type="number"
-                            id="warehouse-content-top-total"
-                            className="warehouse-content-top-number total"
-                            value={values}
-                          />
-                          <div className="d-flex flex-column ">
-                            <button
-                              className="warehouse-content-top-increase"
-                              onClick={increaseValues}
-                            >
-                              <i className="fa-solid fa-chevron-up"></i>
-                            </button>
-                            <button
-                              className="warehouse-content-top-reduce"
-                              onClick={reduceValues}
-                            >
-                              <i className="fa-solid fa-chevron-down"></i>
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="warehouse-content-top-group-remaining">
-                        <label className="warehouse-content-top-remaining-id">
-                          Còn lại
-                        </label>
-                        <input
-                          type="number"
-                          id="warehouse-content-top-remaining-id"
-                          className="warehouse-content-top-remaining-input warehouse-content-top-number text-white"
-                          value={5}
-                          readOnly
-                        />
-                      </div>
-                    </div>
-                  </div>
-                  <div className="warehouse-content-top-center">
-                    <img
-                      src="https://i.pinimg.com/564x/10/ee/98/10ee98130fcb4261135dce02f701518a.jpg"
-                      alt=""
-                      className="warehouse-content-top-center-image"
-                    />
-                  </div>
-                  <div className="warehouse-content-top-dot">
-                    <img src={icondot} alt="" />
-                  </div>
-                </div>
-                <div className="warehouse-content-bottom">
-                  Thời gian cập nhật gần nhất 14:30, 05 tháng 05, 2023
-                </div>
-              </div>
-              <div className="warehouse-content-box bg-white">
-                <div className="warehouse-content-top d-flex  justify-content-between">
-                  <div className="warehouse-content-top-left">
-                    <h2 className="warehouse-content-top-name">Nút sơ mi</h2>
-                    <p className="warehouse-content-top-price">2.000đ</p>
-                    <div className="warehouse-content-top-quantity">
-                      <div className="d-flex justify-content-between">
-                        <div className="warehouse-content-top-group d-flex justify-content-between align-items-center">
-                          <div>
-                            <label className="warehouse-content-top-used">
-                              Đã sử dụng
-                            </label>
-                            <input
-                              type="number"
-                              id="warehouse-content-top-useds"
-                              className="warehouse-content-top-number"
-                              value={value}
-                              onChange={(e) => setValue(e.target.value)}
-                            />
-                          </div>
-                          <div className="d-flex flex-column ">
-                            <button
-                              className="warehouse-content-top-increase"
-                              onClick={increaseValue}
-                            >
-                              <i className="fa-solid fa-chevron-up"></i>
-                            </button>
-                            <button
-                              className="warehouse-content-top-reduce"
-                              onClick={reduceValue}
-                            >
-                              <i className="fa-solid fa-chevron-down"></i>
-                            </button>
-                          </div>
-                        </div>
-                        <div className="warehouse-content-top-group-total d-flex justify-content-between align-items-center ">
-                          <label className="warehouse-content-top-total">
-                            Tổng
-                          </label>
-                          <input
-                            type="number"
-                            id="warehouse-content-top-total"
-                            className="warehouse-content-top-number total"
-                            value={values}
-                          />
-                          <div className="d-flex flex-column ">
-                            <button
-                              className="warehouse-content-top-increase"
-                              onClick={increaseValues}
-                            >
-                              <i className="fa-solid fa-chevron-up"></i>
-                            </button>
-                            <button
-                              className="warehouse-content-top-reduce"
-                              onClick={reduceValues}
-                            >
-                              <i className="fa-solid fa-chevron-down"></i>
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="warehouse-content-top-group-remaining">
-                        <label className="warehouse-content-top-remaining-id">
-                          Còn lại
-                        </label>
-                        <input
-                          type="number"
-                          id="warehouse-content-top-remaining-id"
-                          className="warehouse-content-top-remaining-input warehouse-content-top-number text-white"
-                          value={5}
-                          readOnly
-                        />
-                      </div>
-                    </div>
-                  </div>
-                  <div className="warehouse-content-top-center">
-                    <img
-                      src="https://i.pinimg.com/564x/10/ee/98/10ee98130fcb4261135dce02f701518a.jpg"
-                      alt=""
-                      className="warehouse-content-top-center-image"
-                    />
-                  </div>
-                  <div className="warehouse-content-top-dot">
-                    <img src={icondot} alt="" />
-                  </div>
-                </div>
-                <div className="warehouse-content-bottom">
-                  Thời gian cập nhật gần nhất 14:30, 05 tháng 05, 2023
-                </div>
-              </div>
-              <div className="warehouse-content-box bg-white">
-                <div className="warehouse-content-top d-flex  justify-content-between">
-                  <div className="warehouse-content-top-left">
-                    <h2 className="warehouse-content-top-name">Nút sơ mi</h2>
-                    <p className="warehouse-content-top-price">2.000đ</p>
-                    <div className="warehouse-content-top-quantity">
-                      <div className="d-flex justify-content-between">
-                        <div className="warehouse-content-top-group d-flex justify-content-between align-items-center">
-                          <div>
-                            <label className="warehouse-content-top-used">
-                              Đã sử dụng
-                            </label>
-                            <input
-                              type="number"
-                              id="warehouse-content-top-useds"
-                              className="warehouse-content-top-number"
-                              value={value}
-                              onChange={(e) => setValue(e.target.value)}
-                            />
-                          </div>
-                          <div className="d-flex flex-column ">
-                            <button
-                              className="warehouse-content-top-increase"
-                              onClick={increaseValue}
-                            >
-                              <i className="fa-solid fa-chevron-up"></i>
-                            </button>
-                            <button
-                              className="warehouse-content-top-reduce"
-                              onClick={reduceValue}
-                            >
-                              <i className="fa-solid fa-chevron-down"></i>
-                            </button>
-                          </div>
-                        </div>
-                        <div className="warehouse-content-top-group-total d-flex justify-content-between align-items-center ">
-                          <label className="warehouse-content-top-total">
-                            Tổng
-                          </label>
-                          <input
-                            type="number"
-                            id="warehouse-content-top-total"
-                            className="warehouse-content-top-number total"
-                            value={values}
-                          />
-                          <div className="d-flex flex-column ">
-                            <button
-                              className="warehouse-content-top-increase"
-                              onClick={increaseValues}
-                            >
-                              <i className="fa-solid fa-chevron-up"></i>
-                            </button>
-                            <button
-                              className="warehouse-content-top-reduce"
-                              onClick={reduceValues}
-                            >
-                              <i className="fa-solid fa-chevron-down"></i>
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="warehouse-content-top-group-remaining">
-                        <label className="warehouse-content-top-remaining-id">
-                          Còn lại
-                        </label>
-                        <input
-                          type="number"
-                          id="warehouse-content-top-remaining-id"
-                          className="warehouse-content-top-remaining-input warehouse-content-top-number text-white"
-                          value={5}
-                          readOnly
-                        />
-                      </div>
-                    </div>
-                  </div>
-                  <div className="warehouse-content-top-center">
-                    <img
-                      src="https://i.pinimg.com/564x/10/ee/98/10ee98130fcb4261135dce02f701518a.jpg"
-                      alt=""
-                      className="warehouse-content-top-center-image"
-                    />
-                  </div>
-                  <div className="warehouse-content-top-dot">
-                    <img src={icondot} alt="" />
-                  </div>
-                </div>
-                <div className="warehouse-content-bottom">
-                  Thời gian cập nhật gần nhất 14:30, 05 tháng 05, 2023
-                </div>
-              </div>
-              <div className="warehouse-content-box bg-white">
-                <div className="warehouse-content-top d-flex  justify-content-between">
-                  <div className="warehouse-content-top-left">
-                    <h2 className="warehouse-content-top-name">Nút sơ mi</h2>
-                    <p className="warehouse-content-top-price">2.000đ</p>
-                    <div className="warehouse-content-top-quantity">
-                      <div className="d-flex justify-content-between">
-                        <div className="warehouse-content-top-group d-flex justify-content-between align-items-center">
-                          <div>
-                            <label className="warehouse-content-top-used">
-                              Đã sử dụng
-                            </label>
-                            <input
-                              type="number"
-                              id="warehouse-content-top-useds"
-                              className="warehouse-content-top-number"
-                              value={value}
-                              onChange={(e) => setValue(e.target.value)}
-                            />
-                          </div>
-                          <div className="d-flex flex-column ">
-                            <button
-                              className="warehouse-content-top-increase"
-                              onClick={increaseValue}
-                            >
-                              <i className="fa-solid fa-chevron-up"></i>
-                            </button>
-                            <button
-                              className="warehouse-content-top-reduce"
-                              onClick={reduceValue}
-                            >
-                              <i className="fa-solid fa-chevron-down"></i>
-                            </button>
-                          </div>
-                        </div>
-                        <div className="warehouse-content-top-group-total d-flex justify-content-between align-items-center ">
-                          <label className="warehouse-content-top-total">
-                            Tổng
-                          </label>
-                          <input
-                            type="number"
-                            id="warehouse-content-top-total"
-                            className="warehouse-content-top-number total"
-                            value={values}
-                          />
-                          <div className="d-flex flex-column ">
-                            <button
-                              className="warehouse-content-top-increase"
-                              onClick={increaseValues}
-                            >
-                              <i className="fa-solid fa-chevron-up"></i>
-                            </button>
-                            <button
-                              className="warehouse-content-top-reduce"
-                              onClick={reduceValues}
-                            >
-                              <i className="fa-solid fa-chevron-down"></i>
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="warehouse-content-top-group-remaining">
-                        <label className="warehouse-content-top-remaining-id">
-                          Còn lại
-                        </label>
-                        <input
-                          type="number"
-                          id="warehouse-content-top-remaining-id"
-                          className="warehouse-content-top-remaining-input warehouse-content-top-number text-white"
-                          value={5}
-                          readOnly
-                        />
-                      </div>
-                    </div>
-                  </div>
-                  <div className="warehouse-content-top-center">
-                    <img
-                      src="https://i.pinimg.com/564x/10/ee/98/10ee98130fcb4261135dce02f701518a.jpg"
-                      alt=""
-                      className="warehouse-content-top-center-image"
-                    />
-                  </div>
-                  <div className="warehouse-content-top-dot">
-                    <img src={icondot} alt="" />
-                  </div>
-                </div>
-                <div className="warehouse-content-bottom">
-                  Thời gian cập nhật gần nhất 14:30, 05 tháng 05, 2023
-                </div>
-              </div>
-              <div className="warehouse-content-box bg-white">
-                <div className="warehouse-content-top d-flex  justify-content-between">
-                  <div className="warehouse-content-top-left">
-                    <h2 className="warehouse-content-top-name">Nút sơ mi</h2>
-                    <p className="warehouse-content-top-price">2.000đ</p>
-                    <div className="warehouse-content-top-quantity">
-                      <div className="d-flex justify-content-between">
-                        <div className="warehouse-content-top-group d-flex justify-content-between align-items-center">
-                          <div>
-                            <label className="warehouse-content-top-used">
-                              Đã sử dụng
-                            </label>
-                            <input
-                              type="number"
-                              id="warehouse-content-top-useds"
-                              className="warehouse-content-top-number"
-                              value={value}
-                              onChange={(e) => setValue(e.target.value)}
-                            />
-                          </div>
-                          <div className="d-flex flex-column ">
-                            <button
-                              className="warehouse-content-top-increase"
-                              onClick={increaseValue}
-                            >
-                              <i className="fa-solid fa-chevron-up"></i>
-                            </button>
-                            <button
-                              className="warehouse-content-top-reduce"
-                              onClick={reduceValue}
-                            >
-                              <i className="fa-solid fa-chevron-down"></i>
-                            </button>
-                          </div>
-                        </div>
-                        <div className="warehouse-content-top-group-total d-flex justify-content-between align-items-center ">
-                          <label className="warehouse-content-top-total">
-                            Tổng
-                          </label>
-                          <input
-                            type="number"
-                            id="warehouse-content-top-total"
-                            className="warehouse-content-top-number total"
-                            value={values}
-                          />
-                          <div className="d-flex flex-column ">
-                            <button
-                              className="warehouse-content-top-increase"
-                              onClick={increaseValues}
-                            >
-                              <i className="fa-solid fa-chevron-up"></i>
-                            </button>
-                            <button
-                              className="warehouse-content-top-reduce"
-                              onClick={reduceValues}
-                            >
-                              <i className="fa-solid fa-chevron-down"></i>
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="warehouse-content-top-group-remaining">
-                        <label className="warehouse-content-top-remaining-id">
-                          Còn lại
-                        </label>
-                        <input
-                          type="number"
-                          id="warehouse-content-top-remaining-id"
-                          className="warehouse-content-top-remaining-input warehouse-content-top-number text-white"
-                          value={5}
-                          readOnly
-                        />
-                      </div>
-                    </div>
-                  </div>
-                  <div className="warehouse-content-top-center">
-                    <img
-                      src="https://i.pinimg.com/564x/10/ee/98/10ee98130fcb4261135dce02f701518a.jpg"
-                      alt=""
-                      className="warehouse-content-top-center-image"
-                    />
-                  </div>
-                  <div className="warehouse-content-top-dot">
-                    <img src={icondot} alt="" />
-                  </div>
-                </div>
-                <div className="warehouse-content-bottom">
-                  Thời gian cập nhật gần nhất 14:30, 05 tháng 05, 2023
-                </div>
-              </div>
-              <div className="warehouse-content-box bg-white">
-                <div className="warehouse-content-top d-flex  justify-content-between">
-                  <div className="warehouse-content-top-left">
-                    <h2 className="warehouse-content-top-name">Nút sơ mi</h2>
-                    <p className="warehouse-content-top-price">2.000đ</p>
-                    <div className="warehouse-content-top-quantity">
-                      <div className="d-flex justify-content-between">
-                        <div className="warehouse-content-top-group d-flex justify-content-between align-items-center">
-                          <div>
-                            <label className="warehouse-content-top-used">
-                              Đã sử dụng
-                            </label>
-                            <input
-                              type="number"
-                              id="warehouse-content-top-useds"
-                              className="warehouse-content-top-number"
-                              value={value}
-                              onChange={(e) => setValue(e.target.value)}
-                            />
-                          </div>
-                          <div className="d-flex flex-column ">
-                            <button
-                              className="warehouse-content-top-increase"
-                              onClick={increaseValue}
-                            >
-                              <i className="fa-solid fa-chevron-up"></i>
-                            </button>
-                            <button
-                              className="warehouse-content-top-reduce"
-                              onClick={reduceValue}
-                            >
-                              <i className="fa-solid fa-chevron-down"></i>
-                            </button>
-                          </div>
-                        </div>
-                        <div className="warehouse-content-top-group-total d-flex justify-content-between align-items-center ">
-                          <label className="warehouse-content-top-total">
-                            Tổng
-                          </label>
-                          <input
-                            type="number"
-                            id="warehouse-content-top-total"
-                            className="warehouse-content-top-number total"
-                            value={values}
-                          />
-                          <div className="d-flex flex-column ">
-                            <button
-                              className="warehouse-content-top-increase"
-                              onClick={increaseValues}
-                            >
-                              <i className="fa-solid fa-chevron-up"></i>
-                            </button>
-                            <button
-                              className="warehouse-content-top-reduce"
-                              onClick={reduceValues}
-                            >
-                              <i className="fa-solid fa-chevron-down"></i>
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="warehouse-content-top-group-remaining">
-                        <label className="warehouse-content-top-remaining-id">
-                          Còn lại
-                        </label>
-                        <input
-                          type="number"
-                          id="warehouse-content-top-remaining-id"
-                          className="warehouse-content-top-remaining-input warehouse-content-top-number text-white"
-                          value={5}
-                          readOnly
-                        />
-                      </div>
-                    </div>
-                  </div>
-                  <div className="warehouse-content-top-center">
-                    <img
-                      src="https://i.pinimg.com/564x/10/ee/98/10ee98130fcb4261135dce02f701518a.jpg"
-                      alt=""
-                      className="warehouse-content-top-center-image"
-                    />
-                  </div>
-                  <div className="warehouse-content-top-dot">
-                    <img src={icondot} alt="" />
-                  </div>
-                </div>
-                <div className="warehouse-content-bottom">
-                  Thời gian cập nhật gần nhất 14:30, 05 tháng 05, 2023
-                </div>
-              </div>
-              <div className="warehouse-content-box bg-white">
-                <div className="warehouse-content-top d-flex  justify-content-between">
-                  <div className="warehouse-content-top-left">
-                    <h2 className="warehouse-content-top-name">Nút sơ mi</h2>
-                    <p className="warehouse-content-top-price">2.000đ</p>
-                    <div className="warehouse-content-top-quantity">
-                      <div className="d-flex justify-content-between">
-                        <div className="warehouse-content-top-group d-flex justify-content-between align-items-center">
-                          <div>
-                            <label className="warehouse-content-top-used">
-                              Đã sử dụng
-                            </label>
-                            <input
-                              type="number"
-                              id="warehouse-content-top-useds"
-                              className="warehouse-content-top-number"
-                              value={value}
-                              onChange={(e) => setValue(e.target.value)}
-                            />
-                          </div>
-                          <div className="d-flex flex-column ">
-                            <button
-                              className="warehouse-content-top-increase"
-                              onClick={increaseValue}
-                            >
-                              <i className="fa-solid fa-chevron-up"></i>
-                            </button>
-                            <button
-                              className="warehouse-content-top-reduce"
-                              onClick={reduceValue}
-                            >
-                              <i className="fa-solid fa-chevron-down"></i>
-                            </button>
-                          </div>
-                        </div>
-                        <div className="warehouse-content-top-group-total d-flex justify-content-between align-items-center ">
-                          <label className="warehouse-content-top-total">
-                            Tổng
-                          </label>
-                          <input
-                            type="number"
-                            id="warehouse-content-top-total"
-                            className="warehouse-content-top-number total"
-                            value={values}
-                          />
-                          <div className="d-flex flex-column ">
-                            <button
-                              className="warehouse-content-top-increase"
-                              onClick={increaseValues}
-                            >
-                              <i className="fa-solid fa-chevron-up"></i>
-                            </button>
-                            <button
-                              className="warehouse-content-top-reduce"
-                              onClick={reduceValues}
-                            >
-                              <i className="fa-solid fa-chevron-down"></i>
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="warehouse-content-top-group-remaining">
-                        <label className="warehouse-content-top-remaining-id">
-                          Còn lại
-                        </label>
-                        <input
-                          type="number"
-                          id="warehouse-content-top-remaining-id"
-                          className="warehouse-content-top-remaining-input warehouse-content-top-number text-white"
-                          defaultValue={5}
-                          readOnly
-                        />
-                      </div>
-                    </div>
-                  </div>
-                  <div className="warehouse-content-top-center">
-                    <img
-                      src="https://i.pinimg.com/564x/10/ee/98/10ee98130fcb4261135dce02f701518a.jpg"
-                      alt=""
-                      className="warehouse-content-top-center-image"
-                    />
-                  </div>
-                  <div className="warehouse-content-top-dot">
-                    <img src={icondot} alt="" />
-                  </div>
-                </div>
-                <div className="warehouse-content-bottom">
-                  Thời gian cập nhật gần nhất 14:30, 05 tháng 05, 2023
-                </div>
-              </div>
-            </div>
-          </div>
-          <div
-            className="tab-pane fade"
-            id="pills-profile"
-            role="tabpanel"
-            aria-labelledby="pills-profile-tab"
-            tabIndex="0"
-          >
-            2
-          </div>
-          <div
-            className="tab-pane fade"
-            id="pills-contact"
-            role="tabpanel"
-            aria-labelledby="pills-contact-tab"
-            tabIndex="0"
-          >
-            3
-          </div>
-          <div
-            className="tab-pane fade"
-            id="pills-knot"
-            role="tabpanel"
-            aria-labelledby="pills-knot-tab"
-            tabIndex="0"
-          >
-            4
-          </div>
-          <div
-            className="tab-pane fade"
-            id="pills-zipper"
-            role="tabpanel"
-            aria-labelledby="pills-zipper-tab"
-            tabIndex="0"
-          >
-            5
-          </div>
-        </div>
-      </div>
-      <div
-        className="modal fade"
-        id="exampleModal"
-        tabIndex="-1"
-        aria-labelledby="exampleModalLabel"
-        aria-hidden="true"
-      >
-        <div className="modal-dialog">
-          <div className="modal-content">
-            <div className="modal-body">
-              <h3 className="warehouse-model-title">Thông tin mẫu</h3>
-              <div className="warehouse-model-img">
-                <img
-                  src="https://vulcano.sgp1.digitaloceanspaces.com/media/5497/ao-so-mi-dai-tay-1059.jpg"
-                  alt=""
-                  className="warehouse-model-photo"
-                />
-              </div>
-              <div className="warehouse-model-name">
-                <input
-                  type="text"
-                  className="warehouse-model-input"
-                  defaultValue={"Áo Sơ Mi Đồng Phục Cấp 2"}
-                />
-              </div>
-              <div className="warehouse-model-line"></div>
-              <ul className="warehouse-model-menu">
-                <li className="warehouse-model-item">
-                  <strong className="text-dark"> Loại: </strong>{" "}
-                  <input
-                    type="text"
-                    className="warehouse-model-input"
-                    placeholder="Nhập loại"
-                  />
-                </li>
-                <li className="warehouse-model-item">
-                  <strong className="text-dark"> Giá: </strong>{" "}
-                  <span>
-                    {" "}
-                    <input
-                      type="text"
-                      className="warehouse-model-input"
-                      placeholder="nhập tiền"
-                      defaultValue={"199đ"}
-                    />
-                  </span>
-                </li>
-                <li className="warehouse-model-item">
-                  <strong className="text-dark"> Mô tả: </strong>{" "}
-                  <input
-                    type="text"
-                    className="warehouse-model-input"
-                    placeholder="nhập mô tả"
-                  />
-                </li>
-                <li className="warehouse-model-item">
-                  <strong className="text-dark"> Note: </strong>{" "}
-                  <input
-                    type="text"
-                    className="warehouse-model-input"
-                    placeholder="nhập chú ý"
-                  />
-                </li>
-                <li className="warehouse-model-item">
-                  <strong className="text-dark"> Vải cơ sở may: </strong>{" "}
-                  <input
-                    type="text"
-                    className="warehouse-model-input"
-                    placeholder="nhập vải cơ sở may"
-                  />
-                </li>
-              </ul>
-              <div className="text-end">
-                <button type="button" className="warehouse-model-btn">
-                  Cập nhập
-                </button>
-              </div>
+                ))
+              }
             </div>
           </div>
         </div>

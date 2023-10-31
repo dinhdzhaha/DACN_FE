@@ -35,15 +35,12 @@ function ResetPassword() {
         }
         else setIsShowRequireUserName(false);
 
-        console.log(userName);
         const user = {
             userName: userName
         };
     
         axios.put(baseURL+"api/Users/SendOTPToMail", user)
         .then(res => {
-            console.log(res);
-            console.log(res.data);
             if(res.data === true) {
                 localStorage.setItem("userName", userName);
                 showToastMessageSuccess("Mã OTP đã được gửi tới email của bạn");

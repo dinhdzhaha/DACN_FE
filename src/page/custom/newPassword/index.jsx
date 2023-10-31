@@ -98,7 +98,6 @@ function NewPassword() {
         axios.put(baseURL+"api/Users/ResetPassword", content)
         .then(res => {
             console.log(res);
-            console.log(res.data);
             if(res.data === true) {
                 localStorage.clear();
                 showToastMessageSuccess("Mật khẩu mới đã được cập nhật!");

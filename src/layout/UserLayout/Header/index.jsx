@@ -7,8 +7,8 @@ import Dropdown from 'react-bootstrap/Dropdown';
 import { UserContext } from "../../../context/UserContext";
 import dropIcon from "../../../assets/icon/dropdown.svg";
 import axios from "axios";
-import "../../../assets/style/custom/layout/header/header.scss";
 import { showToastMessageError,showToastMessageSuccess } from "../../../components/toast";
+import "../../../assets/style/custom/layout/header/header.scss";
 
 function Header() {
   const currentPath = window.location.pathname;
@@ -30,7 +30,6 @@ function Header() {
   const handleEdit = () => {setActive(0);console.log('aa');navigate("/updateUser");};
   useEffect(() => {
     if(userAuth){
-      console.log('cc')
       axios.get(baseURL+`api/Users/GetUser/${userAuth.id}`,yourConfig).then((res) => {
           setUser(res.data);
       }).catch((err) => {
@@ -40,15 +39,14 @@ function Header() {
           logout();
           navigate("/login");
         }
+        logout();
+        navigate("/login");
       });
     }
   },[]);
   const handleLogout = () => {
     logout();
     navigate("/login");
-  };
-  const toggleNotification = () => {
-    setNotificationVisible(false);
   };
   return (
     <div className="header d-flex justify-content-between">
@@ -83,7 +81,6 @@ function Header() {
           <Dropdown.Toggle variant="null"  bsPrefix="position-relative">
             <div
               className="header-bell-change position-relative"
-              onClick={toggleNotification}
             >
               <img src={bell} alt="" className="header-nav-menu-img-bell" />
               <span className="header-bell-number">1</span>

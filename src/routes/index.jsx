@@ -10,7 +10,8 @@ import OTPCode from "../page/custom/otpCode";
 import NewPassword from "../page/custom/NewPassword";
 import Edit from "../page/custom/edit";
 import SampleProduct from "../page/custom/sample";
-import UpdateAccount from "../page/admin/edit";
+import UpdateAccount from "../page/admin/accounts";
+import Account from "../page/admin/account";
 import Accounts from "../page/admin/accounts";
 const publicRoute = [
   {
@@ -28,7 +29,12 @@ const publicRoute = [
     layout: "admin",
   },
   {
-    path: "/account",
+    path: "/account/:id",
+    component: Account,
+    layout: "admin",
+  },
+  {
+    path: "/accounts",
     component: Accounts,
     layout: "admin",
   },
