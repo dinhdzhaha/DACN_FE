@@ -5,7 +5,6 @@ import icondot from "../../../assets/icon/icondot.svg";
 import Dropdown from 'react-bootstrap/Dropdown';
 import { showToastMessageError,showToastMessageSuccess } from "../../../components/toast";
 import UpdateInventory from "../../../components/updateInventory";
-import Popup from "reactjs-popup";
 
 function Warehouse() {
   const userAuth = JSON.parse(localStorage.getItem("userAuth"));
@@ -303,10 +302,8 @@ function Warehouse() {
                         </div>
                     </Dropdown.Toggle>
                     <Dropdown.Menu className="drop-width">
-                      <Dropdown.Item className="bordered-item-warehouse">
-                          <Popup modal trigger={<button>Cập nhật khác</button>}>
-                        {close => <UpdateInventory close={close} />}
-                      </Popup></Dropdown.Item>
+                      <Dropdown.Item className="bordered-item-warehouse"  data-bs-toggle="modal"
+                        data-bs-target="#exampleModal1" onClick={() => openModal(item)}>Cập nhật khác</Dropdown.Item>
                       <Dropdown.Item  className="bordered-item-warehouse" onClick={()=>handleDelete(item.id)}>Xóa</Dropdown.Item>
                     </Dropdown.Menu>
                   </Dropdown>
