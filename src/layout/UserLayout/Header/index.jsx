@@ -34,13 +34,16 @@ function Header() {
           setUser(res.data);
       }).catch((err) => {
         console.log(err);
-        if(err.response.status===401){
+        if(err?.response?.status===401){
           showToastMessageError("Vui lòng đăng nhập lại!");
           logout();
           navigate("/login");
         }
-        logout();
-        navigate("/login");
+        else
+        {
+          logout();
+          navigate("/login");
+        }
       });
     }
   },[]);

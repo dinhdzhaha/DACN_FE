@@ -3,9 +3,11 @@ import { useState, useEffect } from 'react';
 import axios from "axios";
 import { useNavigate } from 'react-router-dom';
 import '../../../assets/style/login/login/login.scss';
+import { Circles  } from 'react-loading-icons';
 import { showToastMessageError,showToastMessageSuccess } from "../../../components/toast";
 
 function OTPCode() {
+    const [isLoad, setLoad] = useState(false);
     const userName= localStorage.getItem("userName");
     const [optCode, setOptCode] = useState('');
     const navigate=useNavigate();
@@ -19,6 +21,7 @@ function OTPCode() {
         navigate('/resetPassword');
     }
     const handleSubmit=(e) => {
+        setLoad(true);
         if(optCode.length === 0) {
             setIsShowRequireOtp(true);
             return;
@@ -29,10 +32,12 @@ function OTPCode() {
             userName: userName,
             otpCode: optCode
         };
-    
+
+
         axios.get(baseURL+`api/Users/CheckOTP/?oTP=${optCode}&userName=${userName}`)
         .then(res => {
             if(res.data === true) {
+                setLoad(false);
                 localStorage.setItem('otpCode', optCode);
                 navigate('newPassword');
             }
@@ -41,6 +46,7 @@ function OTPCode() {
             }
         })
         .catch(err => {
+            setLoad(false);
             console.log(err);
             if(err.response.data.detail==="OTP Code  is not correct")
             {
@@ -91,7 +97,8 @@ function OTPCode() {
                 <div className='login-information-text'>
                 <span>
                     Vui lòng kiểm tra mail đã đăng ký với
-                    <br/>tài khoản để lấy mã OTP!
+                    <br/>tài khoản <u><b>{userName}</b></u>
+                    {" "}để lấy mã OTP!
                     </span>
                 </div>
             </div>
@@ -119,7 +126,7 @@ function OTPCode() {
                         <span className='login-reset-text' onClick={sendOTPToMail}>Bạn chưa có mã?</span>
                     </div>
                     <button className='login-submit-cancel' type="submit" onClick={handleCancel}>Hủy</button>
-                    <button className='login-submit-otp' type="submit" onClick={handleSubmit}>Tiếp tục</button>
+                    <button className={isLoad?'login-submit-otp-disabled':'login-submit-otp'} type="submit" disabled={isLoad} onClick={handleSubmit}>Tiếp tục {isLoad&&<Circles  className={"loader"}/>}</button>
                 </div>
             </div>
         </div>

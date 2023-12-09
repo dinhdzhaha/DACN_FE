@@ -13,6 +13,8 @@ import SampleProduct from "../page/custom/sample";
 import UpdateAccount from "../page/admin/accounts";
 import Account from "../page/admin/account";
 import Accounts from "../page/admin/accounts";
+import CreateJob from "../page/admin/jobs/createJob";
+import UpdateJob from "../page/admin/jobs/updateJob";
 const publicRoute = [
   {
     path: "/",
@@ -41,6 +43,16 @@ const publicRoute = [
   {
     path: "/update",
     component: UpdateAccount,
+    layout: "admin",
+  },
+  {
+    path: "/createJob",
+    component: CreateJob,
+    layout: "admin",
+  },
+  {
+    path: "/updateJob/:id",
+    component: UpdateJob,
     layout: "admin",
   },
   {

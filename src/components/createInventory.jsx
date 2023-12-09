@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import add from "../assets/icon/add.svg";
-import "../assets/style/components/create.scss";
+import "../assets/style/components/createInventory.scss";
+import { showToastMessageError,showToastMessageSuccess } from "./toast";
+
 function CreateInventory({ data }) {
   const [imagePreview, setImagePreview] = useState(null);
   const [showModal, setShowModal] = useState(true);
@@ -46,14 +48,19 @@ function CreateInventory({ data }) {
     setShowModal(true); // Hiển thị modal sau khi xoá ảnh
   };
   const handleCreate=()=>{
+    if(nameInventory.length == 0)
+    {
+      showToastMessageError("Tên không được để trống!");
+      return;
+    }
     const body={
       "inventoryCategoryId": idInventoryCategory,
       "name": nameInventory,
       "describe": "",
-      "images": imagePreview,
-      "price": parseInt(price, 10),
-      "total": parseInt(total, 10),
-      "used": parseInt(used, 10)
+      "images": imagePreview??0,
+      "price": price?parseInt(price, 10):0,
+      "total": total?parseInt(total, 10):0,
+      "used": used?parseInt(used, 10):0
     }
     axios.post(`${baseURL}api/Inventory/CreateInventory`,body,yourConfig)
     .then((res)=>{
@@ -132,7 +139,7 @@ function CreateInventory({ data }) {
               </div>
               <div className="warehouse-model-line"></div>
               <ul className="warehouse-model-menu">
-                <li className="warehouse-model-item" someAttribute={true}>
+                <li className="warehouse-model-item" >
                   <div className="d-flex">
                     <div className="width-label">
                       <strong className="text-dark"> Loại: </strong>{" "}
@@ -153,7 +160,7 @@ function CreateInventory({ data }) {
                     </select>
                   </div>
                 </li>
-                <li className="warehouse-model-item" someAttribute={true}>
+                <li className="warehouse-model-item" >
                   <div className="d-flex">
                     <div className="width-label">
                       <strong className="text-dark width-label">Đơn Giá: </strong>{" "}
@@ -170,7 +177,7 @@ function CreateInventory({ data }) {
                     </span>
                   </div>
                 </li>
-                <li className="warehouse-model-item" someAttribute={true}>
+                <li className="warehouse-model-item" >
                   <div className="d-flex">
                     <div className="width-label">
                       <strong className="text-dark width-label">Tổng: </strong>{" "}
@@ -184,7 +191,7 @@ function CreateInventory({ data }) {
                     />
                   </div>
                 </li>
-                <li className="warehouse-model-item" someAttribute={true}>
+                <li className="warehouse-model-item" >
                   <div className="d-flex">
                     <div className="width-label">
                       <strong className="text-dark width-label"> Đã sử dụng: </strong>{" "}

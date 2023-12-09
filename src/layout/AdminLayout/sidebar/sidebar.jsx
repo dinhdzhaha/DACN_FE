@@ -7,30 +7,30 @@ function Sidebar() {
   const [isWarehousePage, setIsWarehousePage] = useState(currentPath==="/warehouse");
   const [isAccount, setIsAccount] = useState(currentPath==="/accounts");
   const [isSample, setIsSample] = useState(currentPath==="/sampleupdate");
-  const [isTask, setIsTask] = useState(currentPath==="/admin");
+  const [isTask, setIsTask] = useState(currentPath==="/admin" || currentPath.includes("Job"));
   useEffect(() => {
-    if(currentPath==="/admin")
+    if(currentPath.includes("admin"))
     {
       setIsTask(true);
       setIsAccount(false);
       setIsWarehousePage(false);
       setIsSample(false); 
     }
-    else if (currentPath==="/accounts" || currentPath.includes("/account"))
+    else if (currentPath.includes("account"))
     {
       setIsAccount(true);
       setIsTask(false);
       setIsWarehousePage(false);
       setIsSample(false); 
     }
-    else if (currentPath==="/warehouse")
+    else if (currentPath.includes("warehouse"))
     {
       setIsWarehousePage(true);
       setIsTask(false);
       setIsAccount(false);
       setIsSample(false); 
     }
-    else if(currentPath==="/sampleupdate")
+    else if(currentPath.includes("sampleupdate"))
     {
       setIsSample(true); 
       setIsWarehousePage(false);

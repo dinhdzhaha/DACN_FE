@@ -1,5 +1,4 @@
 import React, {useEffect, useState, useRef,useContext} from "react";
-import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import "../../../assets/style/custom/edit/edit.scss";
 import camera from "../../../assets/icon/camera.svg";
@@ -21,6 +20,7 @@ function Edit() {
     const nPRef = useRef();
     const cPRef = useRef();
     const [isDisable,setDisable]=useState(true);
+    const [isShowOther,setIsShowOther]=useState(false);
     const [showUpdatePassword, setShowUpdatePassword] = useState(false);
     const [isLoad, setLoad] = useState(false);
     const [useData,setUseData]=useState({});
@@ -32,7 +32,7 @@ function Edit() {
     });
     useEffect(() => {
         if (userAuth===null) {
-            logout()
+            logout();
             navigate("/login");
             return;
         }
@@ -115,8 +115,8 @@ function Edit() {
             "lastName": useData?.lastName,
         };
         axios.put(baseURL+`api/Users/UpdatePasswordForUser`,bodyParameters,config).then((res) => {
+            setUseStateData(res.data);
             setUseData(res.data);
-            
             setLoad(false);
             setDisable(true);
             showToastMessageSuccess("Cập nhật thành công!");
@@ -135,7 +135,10 @@ function Edit() {
                 setUsePassword((usePass)=>({...usePass,oldPassword:""}));
                 return;
             }
-            showToastMessageError(err.response.data.detail);
+            else
+            {
+                showToastMessageError(err.response.data.detail);
+            }
         });
     }
     const handleCancel= ()=>{
@@ -157,21 +160,21 @@ function Edit() {
         });
     },[]);
     const handleImageUpload = (e) => {
+        setDisable(false);
         const file = e.target.files[0];
-    
-    if (file) {
-        convertImageToBase64(file);
-    }
-    };
-    const convertImageToBase64 = (file) => {
-    const reader = new FileReader();
-    
-    reader.onload = (e) => {
-        const base64String = e.target.result;
-        // Ở đây, bạn có thể sử dụng base64String cho mục đích của mình
-    };
-    
-    reader.readAsDataURL(file);
+
+        if (file) {
+        const reader = new FileReader();
+
+        reader.onload = (e) => {
+            const updatedUserData = { ...useData };
+
+            updatedUserData.avatar = e.target.result;
+            setUseData(updatedUserData);
+        };
+
+        reader.readAsDataURL(file);
+        }
     };
     return (
         <div className="edit">
@@ -214,8 +217,7 @@ function Edit() {
                     type="text"
                     className="edit-form-first-name-input edit-input"
                     placeholder="Nhập họ và tên lót"
-                    required
-                    value={useData?.firstName}
+                    value={useData?.firstName || ''}
                     onChange={(event) => {setUseData(useData=>({...useData,firstName:event.target.value}));setDisable(false);}}
                     ref={fNRef}
                 />
@@ -230,8 +232,7 @@ function Edit() {
                     type="text"
                     className="edit-form-last-name-input edit-input"
                     placeholder="Nhập tên"
-                    required
-                    value={useData?.lastName}
+                    value={useData?.lastName|| ''}
                     onChange={(event) => {setUseData(useData=>({...useData,lastName:event.target.value}));setDisable(false);}}
                     ref={lNRef}
                 />
@@ -250,8 +251,7 @@ function Edit() {
                     type="text"
                     className="edit-form-email-input edit-input"
                     placeholder="Nhập địa chỉ email"
-                    required
-                    value={useData?.email}
+                    value={useData?.email|| ''}
                     onChange={(event) => {setUseData(useData=>({...useData,email:event.target.value}));setDisable(false);}}
                     ref={eRef}
                 />
@@ -266,8 +266,7 @@ function Edit() {
                     type="phone"
                     className="edit-form-phone edit-input"
                     placeholder="Nhập số điện thoại"
-                    required
-                    value={useData?.phone}
+                    value={useData?.phone|| ''}
                     onChange={(event) => {setUseData(useData=>({...useData,phone:event.target.value}));setDisable(false);}}
                     ref={pRef}
                 />
@@ -283,8 +282,7 @@ function Edit() {
                 type="phone"
                 className="edit-form-address-input edit-input"
                 placeholder="Nhập địa chỉ"
-                required
-                value={useData?.address}
+                value={useData?.address|| ''}
                 onChange={(event) => {setUseData(useData=>({...useData,address:event.target.value}));setDisable(false);}}
                 ref={adRef}
                 />
@@ -309,7 +307,7 @@ function Edit() {
                         type="password"
                         className="edit-form-address edit-input text-start"
                         placeholder="Nhập mật khẩu cũ"
-                        value={usePassword?.oldPassword}
+                        value={usePassword?.oldPassword|| ''}
                         onChange={(event) => {setUsePassword((usePass)=>({...usePass,oldPassword:event.target.value}));setDisable(false);}}
                         ref={oPRef}
                     />
@@ -324,7 +322,7 @@ function Edit() {
                         type="password"
                         className="edit-form-password-new-input edit-input"
                         placeholder="Nhập mật khẩu mới"
-                        value={usePassword?.newPassword}
+                        value={usePassword?.newPassword|| ''}
                         onChange={(event) => {setUsePassword((usePass)=>({...usePass,newPassword:event.target.value}));setDisable(false);}}
                         ref={nPRef}
                     />
@@ -340,7 +338,7 @@ function Edit() {
                     type="password"
                     className="edit-form-password-confirm-input edit-input"
                     placeholder="Nhập xác nhận mật khẩu mới"
-                    value={usePassword?.confirmPassword}
+                    value={usePassword?.confirmPassword|| ''}
                     onChange={(event) => {setUsePassword((usePass)=>({...usePass,confirmPassword:event.target.value}));setDisable(false);}}
                     ref={cPRef}
                     />
@@ -366,6 +364,15 @@ function Edit() {
             <div className="show-other-information-title">
             <span>Số đo cơ thể</span>
             </div>
+            {!isShowOther && (
+                <div className="show-other">
+                    <span className="edit-show-update" onClick={()=>setIsShowOther(!isShowOther)}>
+                        Hiện thị thông tin số đo cơ thể
+                    </span>
+                </div>
+            )}
+            {isShowOther && (
+                <div>
                 <div className="show-other-information-user">
                     <div>
                     <div className="row row-css">
@@ -376,8 +383,7 @@ function Edit() {
                             <input
                                 type="text"
                                 className="show-other-information-user-input"
-                                value={useData?.neckCircumference}
-                                readOnly
+                                defaultValue={useData?.neckCircumference}
                                 disabled
                             />
                         </div>
@@ -388,8 +394,7 @@ function Edit() {
                             <input
                                 type="text"
                                 className="show-other-information-user-input"
-                                value={useData?.checkCircumference}
-                                readOnly
+                                defaultValue={useData?.checkCircumference}
                                 disabled
                             />
                         </div>
@@ -400,8 +405,7 @@ function Edit() {
                             <input
                                 type="text"
                                 className="show-other-information-user-input"
-                                value={useData?.waistCircumference}
-                                readOnly
+                                defaultValue={useData?.waistCircumference}
                                 disabled
                             />
                         </div>
@@ -414,8 +418,7 @@ function Edit() {
                             <input
                                 type="text"
                                 className="show-other-information-user-input"
-                                value={useData?.buttCircumference}
-                                readOnly
+                                defaultValue={useData?.buttCircumference}
                                 disabled
                             />
                         </div>
@@ -426,8 +429,7 @@ function Edit() {
                             <input
                                 type="text"
                                 className="show-other-information-user-input"
-                                value={useData?.underarmCircumference}
-                                readOnly
+                                defaultValue={useData?.underarmCircumference}
                                 disabled
                             />
                         </div>
@@ -438,8 +440,7 @@ function Edit() {
                             <input
                                 type="text"
                                 className="show-other-information-user-input"
-                                value={useData?.shoulderWidth}
-                                readOnly
+                                defaultValue={useData?.shoulderWidth}
                                 disabled
                             />
                         </div>
@@ -452,8 +453,7 @@ function Edit() {
                             <input
                                 type="text"
                                 className="show-other-information-user-input"
-                                value={ useData?.armCircumference}
-                                readOnly
+                                defaultValue={ useData?.armCircumference}
                                 disabled
                             />
                         </div>
@@ -464,8 +464,7 @@ function Edit() {
                             <input
                                 type="text"
                                 className="show-other-information-user-input"
-                                value={useData?.sleeveLength}
-                                readOnly
+                                defaultValue={useData?.sleeveLength}
                                 disabled
                             />
                         </div>
@@ -476,8 +475,7 @@ function Edit() {
                             <input
                                 type="text"
                                 className="show-other-information-user-input"
-                                value={useData?.cuffCircumference}
-                                readOnly
+                                defaultValue={useData?.cuffCircumference}
                                 disabled
                             />
                         </div>
@@ -490,8 +488,7 @@ function Edit() {
                             <input
                                 type="text"
                                 className="show-other-information-user-input"
-                                value={useData?.shirtLength}
-                                readOnly
+                                defaultValue={useData?.shirtLength}
                                 disabled
                             />
                         </div>
@@ -504,8 +501,7 @@ function Edit() {
                             <input
                                 type="text"
                                 className="show-other-information-user-input"
-                                value={useData?.thighCircumference}
-                                readOnly
+                                defaultValue={useData?.thighCircumference}
                                 disabled
                             />
                         </div>
@@ -516,8 +512,7 @@ function Edit() {
                             <input
                                 type="text"
                                 className="show-other-information-user-input"
-                                value={useData?.bottomCircumference}
-                                readOnly
+                                defaultValue={useData?.bottomCircumference}
                                 disabled
                             />
                         </div>
@@ -528,8 +523,7 @@ function Edit() {
                             <input
                                 type="text"
                                 className="show-other-information-user-input"
-                                value={useData?.pantLength}
-                                readOnly
+                                defaultValue={useData?.pantLength}
                                 disabled
                             />
                         </div>
@@ -542,8 +536,7 @@ function Edit() {
                             <input
                                 type="text"
                                 className="show-other-information-user-input"
-                                value={useData?.kneeHeight}
-                                readOnly
+                                defaultValue={useData?.kneeHeight}
                                 disabled
                             />
                         </div>
@@ -554,14 +547,22 @@ function Edit() {
                             <input
                                 type="text"
                                 className="show-other-information-user-input"
-                                value={useData?.pantLegWidth}
-                                readOnly
-                                disabled
+                                defaultValue={useData?.pantLegWidth}
+                                    disabled
                             />
                         </div>
                     </div>
                 </div>
             </div>
+                <div className="show-other">
+                    <div className="edit-update-password">
+                        <span className="edit-show-update" onClick={()=>setIsShowOther(!isShowOther)}>
+                            Ẩn thông tin số đo cơ thể
+                        </span>
+                    </div>
+                </div>
+            </div>
+            )}
         </div>
         </div>
     );

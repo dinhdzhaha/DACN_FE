@@ -19,28 +19,30 @@ function SampleProduct()
     const [category, setCategory]=useState([]);
     useEffect(() => { 
         let listLike=null;
-        axios.get(baseURL+`api/UserSample/GetUserSampleByUserQuery?userId=${userAuth.id}`,yourConfig).then((res) => {
-            listLike=res.data;
-            axios.get(baseURL+`api/Sample/GetSamples`,yourConfig).then((res) => {
-                setListSamples(res.data);
-                setListSampleProduct(res.data.filter((item)=>item.isMale==isShowLineMale).map((item, index) => ({
-                    id: item.id,
-                    productCategoryId: item.productCategoryId,
-                    img: item.images,
-                    name: item.name,
-                    price: item.price,
-                    like: listLike.some((itemLike) => itemLike.sampleId === item.id)
-                })));
-                }).catch((err) => {
-                    console.log(err);
-                });
-            setListSamplesIdLike(res.data);
-        }).catch((err) => {
-            console.log(err);
-        });
-
+        
         axios.get(baseURL+`api/ProductCategory/GetAllProductCategory`,yourConfig).then((res) => {
             setCategory(res.data);
+            const productCategoryId= res.data[0].id;
+            axios.get(baseURL+`api/UserSample/GetUserSampleByUserQuery?userId=${userAuth.id}`,yourConfig).then((res) => {
+                listLike=res.data;
+                axios.get(baseURL+`api/Sample/GetSamples`,yourConfig).then((res) => {
+                    setListSamples(res.data);
+                    setListSampleProduct(res.data.filter((item)=>item.productCategoryId === productCategoryId && item.isMale==isShowLineMale).map((item, index) => ({
+                        id: item.id,
+                        productCategoryId: item.productCategoryId,
+                        img: item.images,
+                        name: item.name,
+                        price: item.price,
+                        isMale: item.isMale,
+                        like: listLike.some((itemLike) => itemLike.sampleId === item.id)
+                    })));
+                    }).catch((err) => {
+                        console.log(err);
+                    });
+                setListSamplesIdLike(res.data);
+            }).catch((err) => {
+                console.log(err);
+            });
             }).catch((err) => {
                 console.log(err);
             });
@@ -56,30 +58,35 @@ function SampleProduct()
             img: item.images,
             name: item.name,
             price: item.price,
+            isMale: item.isMale,
             like: listSamplesIdLike.some((itemLike) => itemLike.sampleId === item.id)
-        })).filter((item) => item.productCategoryId === productCategoryId);
+        })).filter((item) => item.productCategoryId === productCategoryId && item.isMale===isShowLineMale);
         setListSampleProduct(newSample);
     };
     const handleSexMale = () => {
         setIsShowLineMale(true);
         console.log(listSamples);
-        setListSampleProduct(listSamples.filter((item)=>item.isMale).map((item, index) => ({
+        const productCategoryId= category[activeIndex].id;
+        setListSampleProduct(listSamples.filter((item)=>item.isMale && item.productCategoryId === productCategoryId).map((item, index) => ({
             id: item.id,
             productCategoryId: item.productCategoryId,
             img: item.images,
             name: item.name,
             price: item.price,
+            isMale: item.isMale,
             like: listSamplesIdLike.some((itemLike) => itemLike.sampleId === item.id)
         })));
     };
     const handleSexFemale = () => {
         setIsShowLineMale(false);
-        setListSampleProduct(listSamples.filter((item)=>!item.isMale).map((item, index) => ({
+        const productCategoryId= category[activeIndex].id;
+        setListSampleProduct(listSamples.filter((item)=>!item.isMale && item.productCategoryId === productCategoryId).map((item, index) => ({
             id: item.id,
             productCategoryId: item.productCategoryId,
             img: item.images,
             name: item.name,
             price: item.price,
+            isMale: item.isMale,
             like: listSamplesIdLike.some((itemLike) => itemLike.sampleId === item.id)
         })));
     };
@@ -178,7 +185,8 @@ function SampleProduct()
                                     <div className='sample-product-img'>
                                         <img className='sample-product-img-img' src={item?.img} alt="sample-product-img"/>
                                     </div>                        
-                                    <div className='sample-product-name'>{item?.name}</div>                        
+                                    <div className='sample-product-name'>
+                                        <p className='two-line-ellipsis name-sample'>{item?.name}</p></div>                        
                                     <div className='sample-product-information'>{item?.price.toLocaleString('vi-VN')} đ</div>                        
                                 </div>
                             </Carousel.Item>

@@ -3,7 +3,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "../../../assets/style/login/login/login.scss";
 import { UserContext } from "../../../context/UserContext";
-import { Circles  } from 'react-loading-icons'
+import { Circles  } from 'react-loading-icons';
 import { showToastMessageError,showToastMessageSuccess } from "../../../components/toast";
 
 function Login() {
@@ -160,11 +160,12 @@ function Login() {
       </div>
       <div className="login-form-submit text-center">
         <button
-          className="login-submit"
+          className={isLoad?"login-submit-disabled":"login-submit"}
           type="submit"
           onClick={handleSubmit}
           onKeyDown={handleKeyDownBtn}
           ref={btnRef}
+          disabled={isLoad}
         >
           Đăng nhập
           {isLoad&&<Circles  className={"loader"}/>}

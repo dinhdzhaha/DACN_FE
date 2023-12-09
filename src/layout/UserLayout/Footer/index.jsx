@@ -2,9 +2,10 @@ import React from "react";
 import "../../../assets/style/custom/layout/footer/footer.scss";
 import logo from "../../../assets/logo/logo.svg";
 function Footer() {
+  const currentPath = window.location.pathname;
   return (
     <footer className="container">
-      <div className="footer d-flex justify-content-between ">
+      <div className={currentPath==='/'?"footer d-flex justify-content-between footer-home":"footer d-flex justify-content-between "}>
         <div className="footer-logo">
           <img src={logo} className="footer-logo-logo" alt="" />
         </div>

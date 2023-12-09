@@ -4,9 +4,11 @@ import { useState} from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../../../assets/style/login/login/login.scss';
 import "react-toastify/dist/ReactToastify.css";
+import { Circles  } from 'react-loading-icons'
 import { showToastMessageError,showToastMessageSuccess } from "../../../components/toast";
 
 function ResetPassword() {
+    const [isLoad, setLoad] = useState(false);
     const [userName, setUserName] = useState('');
     const [isShowRequireUserName, setIsShowRequireUserName] = useState(false);
     const navigate=useNavigate();
@@ -23,12 +25,13 @@ function ResetPassword() {
                 return;
             }
             else setIsShowRequireUserName(false);
-            handleSubmit();
+                handleSubmit();
         }
     };
 
     const baseURL = import.meta.env.VITE_API_URL;
     const handleSubmit = () => {
+        setLoad(true);
         if(userName.length === 0) {
             setIsShowRequireUserName(true);
             return;
@@ -47,11 +50,13 @@ function ResetPassword() {
                 navigate('otpCode');
             }
             else showToastMessageError("Tài khoản không tồn tại!")
+            setLoad(false);
         })
         .catch(err => {
+            setLoad(false);
             showToastMessageError(err.message);
             console.log(err.message);
-        })
+        });
     };
     return (
         <div className='login'>
@@ -84,7 +89,7 @@ function ResetPassword() {
             <div className='login-form-submit-reset'>
                 <div className='login-form-submit-reset-right'>
                     <button className='login-submit-cancel' type="submit" onClick={handleCancel}>Hủy</button>
-                    <button className='login-submit-reset' type="submit" onKeyDown={handleKeyDown} onClick={handleSubmit}>Lấy mã OTP</button>
+                    <button className={isLoad?'login-submit-reset-disabled':'login-submit-reset'} disabled={isLoad} type="submit" onKeyDown={handleKeyDown} onClick={handleSubmit}>Lấy mã OTP {isLoad&&<Circles  className={"loader"}/>}</button>
                 </div>
             </div>
         </div>

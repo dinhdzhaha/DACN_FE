@@ -308,3 +308,105 @@
 {
     width: 150px;
 }
+/* CSS cho modal sử dụng thư viện react-modal */
+.ReactModal__Overlay {
+  /* Lớp cho overlay xám xung quanh modal */
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5); /* Màu nền overlay */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000; /* Đảm bảo modal hiển thị trên cùng của các phần tử khác */
+}
+
+.ReactModal__Content {
+  /* Lớp cho nội dung modal */
+  position: relative;
+  background: #fff; /* Màu nền của modal */
+  border: 1px solid #ccc; /* Viền modal */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Đổ bóng cho modal */
+  width: auto; /* Chiều rộng tối đa của modal */
+  height: auto;
+  overflow: auto;
+  border-radius: 12px;
+  /* Thêm các thuộc tính CSS khác cho modal tại đây */
+}
+
+/* CSS cho nút đóng modal */
+.close-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
+  /* Thêm kiểu khác cho nút đóng modal tại đây */
+}
+
+.model-names {
+  color: #000;
+  font-family: "Roboto", sans-serif;
+  font-size: 18px !important;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 160%;
+  letter-spacing: 0.15px;
+  width: 95px !important;
+}
+.upload-load {
+  background: #6c5dd3;
+  width: 100px;
+  text-align: center;
+  height: 31px;
+  line-height: 31px;
+  border-radius: 5px;
+  font-family: "Roboto", sans-serif;
+  color: #ffff;
+  cursor: pointer;
+}
+.warehouse-model-updaload {
+  width: 130px;
+  height: 150px;
+}
+.closes {
+  border: none;
+  outline: none;
+  background: transparent;
+  top: -12px;
+}
+.modal-content{
+  top:0px;
+}
+.warehouse-model-input::placeholder
+{
+  color: rgb(0, 0, 0, 0.4);
+}
+.width-label
+{
+  width: 85px !important;
+}
+.warehouse-model-btn
+{
+  &:hover
+  {
+    background: #6c5dd3;
+  }
+}
+
+.warehouse-content-top-dot{
+  margin-top: -20px;
+  width: 20px !important;
+  height: 15px !important;
+}
+.bordered-item-warehouse{
+  font-size: 15px;
+}
+.padding{
+  padding-left: 20px;
+}
+.text-end{
+  padding-right: 20px;
+  padding-bottom: 20px;
+}

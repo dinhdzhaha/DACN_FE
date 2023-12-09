@@ -4,9 +4,11 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import '../../../assets/style/login/login/login.scss';
+import { Circles  } from 'react-loading-icons';
 import { showToastMessageError,showToastMessageSuccess } from "../../../components/toast";
 
 function NewPassword() {
+    const [isLoad, setLoad] = useState(false);
     const confirmPassRef = useRef();
     const userName= localStorage.getItem("userName");
     const otpCode = localStorage.getItem('otpCode');
@@ -67,6 +69,7 @@ function NewPassword() {
     };
 
     const handleSubmit = () => {
+        setLoad(true);
         const baseURL = import.meta.env.VITE_API_URL;
         if(ConfirmPwd.length === 0 && NewPwd.length === 0)
         {
@@ -97,6 +100,7 @@ function NewPassword() {
         }
         axios.put(baseURL+"api/Users/ResetPassword", content)
         .then(res => {
+            setLoad(false);
             console.log(res);
             if(res.data === true) {
                 localStorage.clear();
@@ -106,6 +110,7 @@ function NewPassword() {
             else showToastMessageError("Tài khoản không tồn tại!")
         })
         .catch(err => {
+            setLoad(false);
             showToastMessageError(err.message);
             console.log(err.message);
         })
@@ -175,7 +180,7 @@ function NewPassword() {
             <div className='login-form-submit-reset'>
                 <div className='login-form-submit-reset-right'>
                     <button className='login-submit-cancel' type="submit" onClick={handleCancel}>Hủy</button>
-                    <button className='login-submit-reset' type="submit" onClick={handleSubmit}>Xác nhận</button>
+                    <button className={isLoad?'login-submit-reset-disabled':'login-submit-reset'} type="submit" disabled={isLoad} onClick={handleSubmit}>Xác nhận {isLoad&&<Circles  className={"loader"}/>}</button>
                 </div>
             </div>
         </div>

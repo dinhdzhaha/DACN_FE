@@ -7,7 +7,8 @@ import { useState,useEffect, useRef } from "react";
 import { showToastMessageError,showToastMessageSuccess } from "../../../components/toast";
 import timedot from "../../../assets/icon/TimelineDot.svg";
 import "../../../assets/style/admin/account/account.scss";
-import { format } from 'date-fns';
+import { parse, differenceInDays, format, parseISO } from "date-fns";
+
 
 function Account() {
   const [load,setLoad]= useState(false);
@@ -41,14 +42,15 @@ function Account() {
         Authorization: "Bearer " + userAuth?.token
     }
   };
-  const [useData,setUseData]=useState({});
-  const [useStateData,setUseStateData]=useState({});
+  const [useData,setUseData]=useState([]);
+  const [useStateData,setUseStateData]=useState([]);
   const [isActiveInfo,setIsActiveInfo]=useState(true);
   const [isActiveOtherInfo,setIsActiveOtherInfo]=useState(true);
   const [isShowPassword, setIsShowPassword] = useState(false);
   const [usePass,setUsePassword]=useState("");
   const[listSample,setListSample]=useState([]);
   const [birthDay,setBirthDay]=useState("");
+  const [task,setTask]=useState([]);
   let { id } = useParams();
   const navigate = useNavigate();
   useEffect(() => {
@@ -71,6 +73,11 @@ function Account() {
         setListSample(listSamples);
         }).catch((err) => {
         });
+    axios.get(baseURL+`api/Task/GetTasksByUserIdQuery?userId=${id}`,yourConfig).then((res) => {
+      setTask(res.data);
+      console.log(res.data)
+    }).catch((err) => {
+    });
   },[]);
   const handleName=(event)=>
   {
@@ -214,7 +221,7 @@ function Account() {
     
     const bodyParameters = {...useData,password:usePass};
     axios.put(baseURL+`api/Users/UpdateUser`,bodyParameters,config).then((res) => {
-        setUseData(res.data);
+        setUseStateData(res.data);
         console.log(res.data);
         const date = new Date(res.data.birthDay);
         setBirthDay(format(date, 'yyyy-MM-dd'));
@@ -239,7 +246,21 @@ function Account() {
   const handleCancelOther= ()=>{
     setIsActiveOtherInfo(true);
     setUseData(useStateData);
-};
+  };
+  const handleClickRow=(id)=>{
+  navigate(`/updateJob/${id}`)
+  };
+  const handlePrice=(item)=>{
+    if(item.isUseCloth)
+    {
+      return (item.product.price + item.product.priceCloth).toLocaleString('vi-VN')+" đ";
+    }
+    return item.product.price.toLocaleString('vi-VN')+" đ";
+  }
+  const handlerTime=(time)=>{
+    const date = new Date(time);
+    return(format(date, 'yyyy-MM-dd'));
+  }
   return (
     <div className="account">
       <nav aria-label="breadcrumb">
@@ -275,55 +296,53 @@ function Account() {
           <div className="account-info-detail">
             <h4 className="account-info-text">Chi tiết</h4>
             <div className="account-info-gach"></div>
-            <p className="account-info-personal-information">
-              <strong>Họ và Tên:</strong> 
+            <div className="account-info-personal-information bottom">
+              <div className="width-30"><strong >Họ và Tên:</strong> </div>
               <input  type="text"
                       value={name}  
                       placeholder="Họ và Tên" 
-                      className="account-info-input"
+                      className="account-info-input width-60"
                       onChange={handleName}
                       ref={nRef}
                       ></input>
-            </p>
-            <p className="account-info-personal-information">
-              <strong>Số điện thoại:</strong> 
+            </div>
+            <div className="account-info-personal-information bottom">
+            <div className="width-30"><strong>Số điện thoại:</strong></div>
               <input  type="number"
                       value={useData?.phone}
                       placeholder="Số điện thoại"
-                      className="account-info-input"
+                      className="account-info-input width-60"
                       onChange={(event) => {setUseData(useData=>({...useData,phone:event.target.value}));setIsActiveInfo(false);}}
                       ref={pRef}
               ></input>
-            </p>
-            <p className="account-info-personal-information">
-              <strong>Địa chỉ:</strong>
+            </div>
+            <div className="account-info-personal-information bottom">
+              <div className="width-30"><strong>Địa chỉ:</strong></div>
               <input
                       type="text" 
                       value={useData?.address}
                       placeholder="Địa chỉ" 
-                      className="account-info-input"
+                      className="account-info-input width-60"
                       onChange={(event) => {setUseData(useData=>({...useData,address:event.target.value}));setIsActiveInfo(false);}}
                       ref={adRef}
                       ></input>
-            </p>
-            <p className="account-info-personal-information">
-              <div className="d-flex align-items-center justify-content-center">
-                <div className="label-pass">
+            </div>
+            <div className="account-info-personal-information bottom">
+                <div className="width-30">
                   <strong>Mật khẩu:</strong>
                 </div>
-                <div className="pass-scss">
-                  <div  className="input-pass">
+                  <div  className="input-pass width-60i">
                     <input 
                             type={isShowPassword ? "text" : "password"}
                             value={usePass}
                             placeholder="Mật khẩu" 
-                            className="account-info-input"
+                            className="account-info-input width-pass"
                             onChange={(event) => {setUsePassword(event.target.value);setIsActiveInfo(false);}}
                             ref={passRef}
                     ></input>
                   </div>
                   {usePass.length > 0 && (
-                    <div className="icon-pass opacity-75">
+                    <div className="icon-left opacity-75 ">
                       <i
                         className={
                           isShowPassword
@@ -337,19 +356,17 @@ function Account() {
                       ></i>
                     </div>
                   )}
-                </div>
-              </div>
-            </p>
-            <p className="account-info-personal-information">
-              <strong>Ngày sinh: </strong>
+            </div>
+            <div className="account-info-personal-information bottom">
+              <div className="width-30"><strong>Ngày sinh: </strong></div>
               <input 
                       type="date" 
                       value={birthDay}
-                      className="account-info-input"
+                      className="account-info-input width-60"
                       onChange={(event) => {setUseData(useData=>({...useData,birthDay:event.target.value}));setIsActiveInfo(false);setBirthDay(event.target.value);}}
                       ref={bRef}
                       ></input>
-            </p>
+            </div>
             <div className="text-end">
                 <button className="btn-cancel" hidden={isActiveInfo} onClick={handleCancel}>
                   Hủy
@@ -604,8 +621,8 @@ function Account() {
               Các sản phẩm may đã đặt may
             </h2>
             <table className="table">
-              <thead className="p-3">
-                <tr className="account-other-information-table-top">
+              <thead className="p-3 text-center align-middle">
+                <tr className="account-other-information-table-top" >
                   <th scope="col" className="account-other-information-th">STT</th>
                   <th scope="col" className="account-other-information-th">Tên</th>
                   <th scope="col" className="account-other-information-th">Thời gian</th>
@@ -614,28 +631,37 @@ function Account() {
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td className="align-middle">1</td>
-                  <td className="align-middle">
-                    <div className="account-other-product-sewing d-flex align-items-center gap-3">
-                      <img
-                        src="https://pos.nvncdn.net/778773-105877/ps/20230713_WcskjVVYHE.jpeg"
-                        alt=""
-                        className="account-other-product-sewing-image"
-                      />
-                      <div className="account-other-product-name text-start">
-                        <strong>Áo sơ mi đồng phục</strong>
-                        <p className="m-0">Đồng phục</p>
-                      </div>
-                    </div>
-                  </td>
-                  <td className="time align-middle">
-                    04/04/2023 -<i className="fa-solid fa-chevron-right"></i>{" "}
-                    15/05/2023
-                  </td>
-                  <td className="price align-middle">299.000đ</td>
-                  <td className="status align-middle">Đã nhận</td>
-                </tr>
+                {
+                  task?.map((item,index)=>
+                    <tr className="cursor hover-row" key={item.id} onClick={()=>handleClickRow(item.id)}>
+                      <td className="align-middle">{index+1}</td>
+                      <td className="align-middle">
+                        <div className="account-other-product-sewing d-flex align-items-center gap-3">
+                          <img
+                            src={item.product.images}
+                            alt=""
+                            className="account-other-product-sewing-image"
+                          />
+                          <div className="account-other-product-name text-start">
+                            <strong>{item.product.name}</strong>
+                            <p className="m-0 category">{item.product.productCategory?.name}</p>
+                          </div>
+                        </div>
+                      </td>
+                      <td className="time align-middle text-center">
+                      {handlerTime(item.startTime)}{" "}<i className="fa-sharp fa-solid fa-arrow-right"></i>{" "}
+                      {handlerTime(item.endTime)}
+                      </td>
+                      <td className="price text-end align-middle">{handlePrice(item)}</td>
+                      {
+                        item.status=="todo"?<td className="text-center align-middle status-todo">Chưa thực hiện</td>:
+                        item.status=="doing"?<td className="text-center align-middle status-doing">Đang thực hiện</td>:
+                        item.status=="done"?<td className="text-center align-middle status-done">Đã xong</td>:
+                        item.status=="complete"?<td className="text-center align-middle status-complete"><div>Đã nhận</div></td>:<td className="align-middle">Đã hủy</td>
+                        }
+                    </tr>
+                    )
+                }
               </tbody>
             </table>
           </div>
@@ -666,18 +692,18 @@ function Account() {
                           alt=""
                           className="account-other-information-image"
                         />
-                        <p className="account-other-information-like-product-shirt-name m-0">
-                          {item.sample.name}
-                        </p>
+                        <div>
+                          <p className="account-other-information-like-product-shirt-desp m-0 mt-2 mb-2">
+                            <strong>Loại: {" "}</strong>{item.sample.productCategory.name}
+                          </p>
+                          <p className="account-other-information-like-product-shirt-name m-0">
+                            <strong>Tên: {" "}</strong>{item.sample.name}
+                          </p>
+                        </div>
                       </div>
-                      <p className="account-other-information-like-product-shirt-desp m-0 mt-2 mb-2">
-                        {item.sample.productCategory.name}
-                      </p>
-                      <p className="account-other-information-like-product-shirt-price chung">
-                        {item.price}
-                      </p>
-                      <p className="account-other-information-like-product-shirt-material chung mt-2">
-                        {item.sample.note}
+                      
+                      <p className="account-other-information-like-product-shirt-price chung mt-2">
+                        <strong>Giá: {" "}</strong>{item.sample.price.toLocaleString('vi-VN')+" đ"}
                       </p>
                     </div>
                   </div>

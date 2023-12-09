@@ -87,7 +87,7 @@ function CreateAccount({ data }) {
         "address": address,
         "firstName": fName,
         "lastName": lName,
-        "avatar": imagePreview,
+        "avatar": imagePreview??"",
         "userName": userName==""?phone:userName,
         "passWord": password==""?phone:password,
         "birthDay": date

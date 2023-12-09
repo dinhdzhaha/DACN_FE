@@ -5,48 +5,53 @@
   }
   &-th {
     color: #fff;
-    font-family: "Rubik", sans-serif;
-    font-size: 23px;
+    font-size: 24px;
     font-style: normal;
-    font-weight: 400;
+    font-weight: 700;
     line-height: normal;
+    text-align: center;
   }
   &-img {
-    width: 117px;
     & img {
-      width: 100%;
-      height: 100%;
+      width: 80px;
+      height: 100px;
       object-fit: cover;
     }
   }
   &-name {
     color: #000;
-    font-family: "Rubik", sans-serif;
-    font-size: 25px;
+    font-size: 22px;
     font-style: normal;
-    font-weight: 700;
     line-height: normal;
   }
   &-name-small {
     color: #000;
-    font-family: "Rubik", sans-serif;
-    font-size: 25px;
+    font-size: 22px;
     font-style: normal;
     font-weight: 400;
     line-height: normal;
+    opacity: 0.6;
   }
   &-price {
-    color: #ffa15c;
-    font-family: "Jost", sans-serif;
-    font-size: 25px;
+    color: #894700;
+    font-size: 22px;
     font-style: normal;
     font-weight: 700;
     line-height: normal;
+    text-align: right;
+  }
+  &-time {
+    color: rgba(58, 53, 65, 0.87);
+    font-size: 22px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    text-align: center;
   }
   &-success {
     color: #effc00;
     font-family: "Jost", sans-serif;
-    font-size: 25px;
+    font-size: 22px;
     font-style: normal;
     font-weight: 700;
     line-height: normal;
@@ -65,23 +70,49 @@
   }
   &-being-made-tilte {
     color: #f00;
-    font-family: "Jost", sans-serif;
-    font-size: 25px;
+    font-size: 22px;
     font-style: normal;
     font-weight: 700;
     line-height: normal;
+    text-align: center;
+    &-doing
+    {
+    color: #FF9F38;
+    font-size: 22px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    text-align: center;
+    }
+    &-done
+    {
+    color: #00ff95;
+    font-size: 22px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    text-align: center;
+    }
+    &-complete
+    {
+    color: #00ff95;
+    font-size: 22px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    text-align: center;
+    }
   }
 }
 td {
-  padding: 15px;
-  text-align: center;
+  padding: 10px !important;
 }
 .received {
   color: #20df7f;
 }
 .progress {
   height: 25px !important;
-  border-radius: 5px !important; 
+  border-radius: 10px !important; 
   background: #dbcdcd !important;
 }
 .progress-bar {
@@ -92,4 +123,101 @@ td {
   text-align: right !important;
   padding-right: 14px !important;
   background: #d83131 !important;
+  &-100{
+    color: #ffffffb8 !important;
+    font-family: "Jost", sans-serif !important;
+    font-size: 22px !important;
+    font-weight: 700 !important;
+    text-align: center !important;
+    background: #20df7f !important;
+  }
+  &-75{
+    color: #ffffffb8 !important;
+    font-family: "Jost", sans-serif !important;
+    font-size: 22px !important;
+    font-weight: 700 !important;
+    text-align: center !important;
+    background: #894700 !important;
+  }
+}
+.name-sp{
+  margin-left: 10px;
+}
+.pagination {
+  display: flex;
+  justify-content: flex-end; /* Align buttons to the right */
+  margin-top: 10px; /* Adjust the margin as needed */
+
+  button {
+    margin-left: 5px; /* Add some spacing between buttons */
+    padding: 5px 10px;
+    cursor: pointer;
+  }
+
+  .active {
+    background-color: #007bff; /* Change the background color for the active button */
+    color: #fff;
+    border: 1px solid #007bff;
+  }
+}
+.opacity-tr{
+  opacity: 0.6;
+}
+
+.border-css
+{
+  border-radius: 10px !important;
+  border: 2px solid #000000;
+}
+
+.ant-table-thead .ant-table-cell{
+  font-size: 17px !important; 
+}
+
+.price-cart{
+  font-size: 17px !important;
+  font-weight: 700 !important;
+  color: #894700 !important;
+}
+
+.time-cart{
+  font-size: 17px !important;
+  font-weight: 700 !important;
+  color: #000 !important;
+}
+.product-cart__name
+{
+  margin-left: 10px;
+  font-size: 17px !important;
+  font-weight: 700 !important;
+  color: #000 !important;
+}
+
+// YourComponent.scss
+
+// Style for the entire table
+.even-row {
+  background-color: rgba(240, 240, 240, 0.5) !important; // Set your desired background color
+
+}
+
+// Style for specific rows based on a condition (for example, rows with even index)
+.odd-row{
+  background-color:rgba(255, 255, 255, 0.5) !important; // Set your desired background color for even rows
+}
+
+// Style for rows with a specific class (add this class to the rows you want to style differently)
+.special-row {
+  background-color:rgba(255, 0, 0, 0.067)!important;// Set your desired background color for special rows
+}
+
+.opacity
+{
+  opacity: 0.5 !important;
+}
+
+.font-15{
+  font-size: 15px !important;
+  font-weight: 400 !important;
+  color: #000 !important;
 }

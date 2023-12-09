@@ -11,6 +11,7 @@ import Dropdown from 'react-bootstrap/Dropdown';
 import CreateInventory from "../../../components/createInventory";
 import CreateAccount from "../../../components/createAccount";
 import "../../../assets/style/admin/layout/header/header.scss";
+import CreateSample from "../../../components/createSample";
 
 function Header() {
   const {logout} = useContext(UserContext);
@@ -18,30 +19,31 @@ function Header() {
   const [isWarehousePage, setIsWarehousePage] = useState(currentPath==="/warehouse");
   const [isAccount, setIsAccount] = useState(currentPath==="/accounts");
   const [isSample, setIsSample] = useState(currentPath==="/sampleupdate");
-  const [isTask, setIsTask] = useState(currentPath==="/admin");
+  const [isTask, setIsTask] = useState(currentPath==="/admin" || currentPath.includes("Job"));
+  console.log(currentPath);
   useEffect(() => {
-    if(currentPath==="/admin")
+    if(currentPath.includes("admin"))
     {
       setIsTask(true);
       setIsAccount(false);
       setIsWarehousePage(false);
       setIsSample(false); 
     }
-    else if (currentPath==="/accounts" || currentPath.includes("/account"))
+    else if (currentPath.includes("account"))
     {
       setIsAccount(true);
       setIsTask(false);
       setIsWarehousePage(false);
       setIsSample(false); 
     }
-    else if (currentPath==="/warehouse")
+    else if (currentPath.includes("warehouse"))
     {
       setIsWarehousePage(true);
       setIsTask(false);
       setIsAccount(false);
       setIsSample(false); 
     }
-    else if(currentPath==="/sampleupdate")
+    else if(currentPath.includes("sampleupdate"))
     {
       setIsSample(true); 
       setIsWarehousePage(false);
@@ -72,25 +74,33 @@ function Header() {
           if(res.data.isAdmin===false) navigate("/");
           setUser(res.data);
       }).catch((err) => {
-        if(err.response.status===401){
+        if(err?.response?.status===401){
           showToastMessageError("Vui lòng đăng nhập lại!");
           logout();
+          navigate("/login");
+        }
+        else{
+          logout();
+          showToastMessageError("Vui lòng đăng nhập!");
           navigate("/login");
         }
       });
     }
     else{
-      showToastMessageError("Vui lòng đăng nhập!");
+      logout();
       navigate("/login");
     }
   },[]);
+  const handleCreateJobs=()=>{
+    navigate("/createJob");
+  };
   const handleLogout = () => {
     logout();
     navigate("/login");
   };
   return (
     <div className="header-admin d-flex justify-content-between">
-      <div className="header-admin-logo">
+      <div className="header-admin-logo" onClick={()=>navigate("/admin")}>
         <img src={logo} alt="" />
       </div>
       <div className="header-admin-center d-flex align-items-center">
@@ -120,11 +130,20 @@ function Header() {
         }
         {
         isSample &&
-          <CreateInventory data="Mẫu mới" />
+          <CreateSample data="Mẫu mới" />
         }
         {
         isTask &&
-          <CreateInventory data="Công việc mới" />
+          <div>
+            <button
+              type="button"
+              className="header-admin-center-btn"
+              onClick={handleCreateJobs}
+            >
+              <img src={add} className="me-2" alt=""/>
+              Công việc mới
+            </button>
+          </div>
         }
         
         <Dropdown className="dropdown-hover">

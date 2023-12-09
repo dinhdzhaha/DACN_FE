@@ -67,6 +67,17 @@
             background-color: #0a914d;
         }
     }
+    &-submit-disabled {
+        margin-top: 20px;
+        color: #ffffff;
+        width: 400px;
+        height: 40px;
+        border-radius: 5px;
+        border: none;
+        background-color: #0a914d;
+        font-weight: 600;
+        transition: background-color 0.3s ease;
+    }
     &-submit-otp{
         color: #ffffff;
         width: 120px;
@@ -79,6 +90,16 @@
         &:hover {
             background-color: #0a914d;
         }
+    }
+    &-submit-otp-disabled{
+        color: #ffffff;
+        width: 120px;
+        height: 40px;
+        border-radius: 5px;
+        border: none;
+        background-color: #0a914d;
+        font-weight: 600;
+        margin-left: 15px;
     }
     &-submit-reset{
         margin-left: 15px;
@@ -93,6 +114,17 @@
         &:hover {
             background-color: #0a914d;
         }
+    }
+    &-submit-reset-disabled{
+        margin-left: 15px;
+        color: #ffffff;
+        width: 180px;
+        height: 40px;
+        border-radius: 5px;
+        border: none;
+        background-color: #0a914d;
+        float: right;
+        font-weight: 600;
     }
     &-submit-cancel{
         color: #000000;

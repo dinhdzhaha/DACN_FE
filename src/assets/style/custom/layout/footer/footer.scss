@@ -1,5 +1,5 @@
 .footer {
-  margin-top: 255px;
+  margin-top: 100px;
   &-center-nav {
     color: #fff;
   }
@@ -20,4 +20,8 @@
   &-center {
     gap: 114px;
   }
+}
+.footer-home
+{
+  margin-top: 255px !important;
 }

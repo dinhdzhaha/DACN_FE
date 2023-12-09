@@ -1,10 +1,18 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import add from "../assets/icon/add.svg";
-import "../assets/style/components/create.scss";
-function CreateInventory({ data }) {
+import "../assets/style/components/createSample.scss";
+import { showToastMessageError,showToastMessageSuccess } from "./toast";
+
+function CreateSample({ data }) {
   const [imagePreview, setImagePreview] = useState(null);
   const [showModal, setShowModal] = useState(true);
+  const [nameSample, setNameSample] = useState("");
+  const [price, setPrice] = useState("");
+  const [description, setDescription] = useState("");
+  const [note, setNote] = useState("");
+  const [productCategoryId, setProductCategoryId] = useState("");
+  const [sex, setSex] = useState("");
   const userAuth = JSON.parse(localStorage.getItem("userAuth"));
   const baseURL = import.meta.env.VITE_API_URL;
   const yourConfig = {
@@ -12,16 +20,11 @@ function CreateInventory({ data }) {
       Authorization: "Bearer " + userAuth?.token
     }
   };
-  const [nameInventory, setNameInventory] = useState("");
-  const [price, setPrice] = useState("");
-  const [total, setTotal] = useState("");
-  const [used, setUsed] = useState(0);
-  const [idInventoryCategory, setIdInventoryCategory] = useState("");
   const [category,setCategory] =useState([{}]);
   useEffect(() => { 
-    axios.get(baseURL+`api/InventoryCategory/GetAllInventoryCategory`,yourConfig).then((res) => {
+    axios.get(baseURL+`api/ProductCategory/GetAllProductCategory`,yourConfig).then((res) => {
       setCategory(res.data);
-      setIdInventoryCategory(res.data[0].id);
+      setProductCategoryId(res.data[0].id);
     }).catch((err) => {
       console.log(err);
     });
@@ -46,16 +49,22 @@ function CreateInventory({ data }) {
     setShowModal(true); // Hiển thị modal sau khi xoá ảnh
   };
   const handleCreate=()=>{
-    const body={
-      "inventoryCategoryId": idInventoryCategory,
-      "name": nameInventory,
-      "describe": "",
-      "images": imagePreview,
-      "price": parseInt(price, 10),
-      "total": parseInt(total, 10),
-      "used": parseInt(used, 10)
+    if(nameSample.length == 0)
+    {
+      showToastMessageError("Tên không được để trống!");
+      return;
     }
-    axios.post(`${baseURL}api/Inventory/CreateInventory`,body,yourConfig)
+    const body=
+    {
+      "productCategoryId": productCategoryId,
+      "name": nameSample,
+      "description": description,
+      "images": imagePreview,
+      "note": note,
+      "price": price,
+      "isMale": sex
+    }
+    axios.post(`${baseURL}api/Sample/CreateSample`,body,yourConfig)
     .then((res)=>{
       window.location.reload();
     })
@@ -84,7 +93,7 @@ function CreateInventory({ data }) {
         <div className="modal-dialog">
           <div className="modal-content">
             <div className="modal-body">
-              <h3 className="warehouse-model-title">Thêm nguyên liệu</h3>
+              <h3 className="warehouse-model-">Thêm mẫu</h3>
               <div className="warehouse-model-img">
                 {imagePreview && (
                   <div className="position-relative">
@@ -107,41 +116,40 @@ function CreateInventory({ data }) {
                   <div className="modal-load">
                     <input
                       type="file"
-                      id="loadimg"
+                      id="loadimg12"
                       accept="image/*"
                       onChange={handleImageChange}
                       className="d-none"
                     />
-                    <label htmlFor="loadimg" className="upload-load">
+                    <label htmlFor="loadimg12" className="upload-load">
                       Tải ảnh
                     </label>
                   </div>
                 )}
               </div>
               <div className="warehouse-model-name">
-                <div className="d-flex">
-                  <h2 className="model-names m-0">Tên:</h2>
+                <div className="d-flex padding">
+                  <h2 className="model-names m-0">Tên mẫu:</h2>
                   <input
                     type="text"
                     className="warehouse-model-input w-100"
                     placeholder="Nhập tên"
-                    value={nameInventory}
-                    onChange={(e) => setNameInventory(e.target.value)}
+                    value={nameSample}
+                    onChange={(e) => setNameSample(e.target.value)}
                   />
                 </div>
               </div>
-              <div className="warehouse-model-line"></div>
+              <div className="warehouse-model-line width-line"></div>
               <ul className="warehouse-model-menu">
-                <li className="warehouse-model-item" someAttribute={true}>
-                  <div className="d-flex">
+                <li className="warehouse-model-item" >
+                  <div className="d-flex padding">
                     <div className="width-label">
                       <strong className="text-dark"> Loại: </strong>{" "}
                     </div>
                     <select
-                      id="selectInput"
                       className="warehouse-model-input"
-                      value={idInventoryCategory}
-                      onChange={(e) => setIdInventoryCategory(e.target.value)}
+                      value={productCategoryId}
+                      onChange={(e) => setProductCategoryId(e.target.value)}
                     >
                       {
                         category.map((item,index)=>{
@@ -153,50 +161,64 @@ function CreateInventory({ data }) {
                     </select>
                   </div>
                 </li>
-                <li className="warehouse-model-item" someAttribute={true}>
-                  <div className="d-flex">
+                <li className="warehouse-model-item" >
+                  <div className="d-flex padding">
                     <div className="width-label">
-                      <strong className="text-dark width-label">Đơn Giá: </strong>{" "}
+                      <strong className="text-dark width-label">Giá: </strong>{" "}
                     </div>
                     <span>
                       {" "}
                       <input
                         type="number"
                         className="warehouse-model-input w-100  "
-                        placeholder="Nhập đơn giá"
+                        placeholder="Nhập giá mẫu"
                         value={price}
                         onChange={(e) => setPrice(e.target.value)}
                       />
                     </span>
                   </div>
                 </li>
-                <li className="warehouse-model-item" someAttribute={true}>
-                  <div className="d-flex">
+                <li className="warehouse-model-item" >
+                  <div className="d-flex padding">
                     <div className="width-label">
-                      <strong className="text-dark width-label">Tổng: </strong>{" "}
+                      <strong className="text-dark width-label">Mô tả: </strong>{" "}
                     </div>
                     <input
                       type="number"
                       className="warehouse-model-input"
-                      placeholder="Nhập tổng số lượng trong kho"
-                      value={total}
-                      onChange={(e) => setTotal(e.target.value)}
+                      placeholder="Nhập mô tả"
+                      value={description}
+                      onChange={(e) => setDescription(e.target.value)}
                     />
                   </div>
                 </li>
-                <li className="warehouse-model-item" someAttribute={true}>
-                  <div className="d-flex">
+                <li className="warehouse-model-item" >
+                  <div className="d-flex padding">
                     <div className="width-label">
-                      <strong className="text-dark width-label"> Đã sử dụng: </strong>{" "}
+                      <strong className="text-dark width-label"> Ghi chú: </strong>{" "}
                     </div>
                     <input
                       type="number"
                       className="warehouse-model-input"
-                      placeholder="Nhập số lượng đã sự dụng"
-                      defaultValue={0}
-                      value={used}
-                      onChange={(e) => setUsed(e.target.value)}
+                      placeholder="Nhập ghi chú"
+                      value={note}
+                      onChange={(e) => setNote(e.target.value)}
                     />
+                  </div>
+                </li>
+                <li className="warehouse-model-item" >
+                  <div className="d-flex padding">
+                    <div className="width-label">
+                      <strong className="text-dark width-label"> Giới tính: </strong>{" "}
+                    </div>
+                    <select className="warehouse-model-input"
+                      placeholder="Chọn giới tính"
+                      value={sex}
+                      onChange={(e) => setSex(e.target.value)}>
+                      <option value="">Chọn giới tính</option>
+                      <option value={true}>Nam</option>
+                      <option value={false}>Nữ</option>
+                    </select>
                   </div>
                 </li>
               </ul>
@@ -213,4 +235,4 @@ function CreateInventory({ data }) {
   );
 }
 
-export default CreateInventory;
+export default CreateSample;
