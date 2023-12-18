@@ -244,13 +244,14 @@ function SampleUpdate() {
                     <div className="width-label">
                       <strong className="text-dark width-label">Mô tả: </strong>{" "}
                     </div>
-                    <input
-                      type="text"
-                      className="warehouse-model-input"
-                      placeholder="Nhập mô tả"
-                      value={description}
-                      onChange={(e) => setDescription(e.target.value)}
-                    />
+                    <textarea
+                                placeholder="Nhập mô tả"
+                                value={description}
+                                onChange={(e) => setDescription(e.target.value)}
+                                className="sample-textarea"
+                                cols={80}
+                                rows={3}
+                                />
                   </div>
                 </li>
                 <li className="warehouse-model-item" >
@@ -258,13 +259,14 @@ function SampleUpdate() {
                     <div className="width-label">
                       <strong className="text-dark width-label"> Ghi chú: </strong>{" "}
                     </div>
-                    <input
-                      type="text"
-                      className="warehouse-model-input"
-                      placeholder="Nhập ghi chú"
-                      value={note}
-                      onChange={(e) => setNote(e.target.value)}
-                    />
+                    <textarea
+                                placeholder="Nhập ghi chú"
+                                value={note}
+                                onChange={(e) => setNote(e.target.value)}
+                                className="sample-textarea"
+                                cols={80}
+                                rows={3}
+                                />
                   </div>
                 </li>
                 <li className="warehouse-model-item" >

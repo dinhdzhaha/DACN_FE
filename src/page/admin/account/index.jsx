@@ -13,12 +13,12 @@ import { parse, differenceInDays, format, parseISO } from "date-fns";
 function Account() {
   const [load,setLoad]= useState(false);
   const nRef = useRef();
-  const eRef = useRef();
   const pRef = useRef();
   const adRef = useRef();
   const nPRef = useRef();
   const passRef=useRef();
   const bRef=useRef();
+  const emailRef=useRef();
   const neckCircumferenceRef=useRef();
   const checkCircumferenceRef=useRef();
   const waistCircumferenceRef=useRef();
@@ -63,7 +63,7 @@ function Account() {
       }).catch((err) => {
         navigate("/accounts");
       });
-      axios.get(baseURL+`api/UserSample/GetUserSampleByUserQuery?userId=${userAuth.id}`,yourConfig).then((res) => {
+      axios.get(baseURL+`api/UserSample/GetUserSampleByUserQuery?userId=${id}`,yourConfig).then((res) => {
         var listSamples=res.data;
         listSamples.map((element) => {
           const utcTime = new Date(element.createdDate);
@@ -106,11 +106,6 @@ function Account() {
           nPRef.current.focus();
           return;
       }
-      else if(useData?.email.length===0){
-          showToastMessageError("Email không được để trống!");
-          eRef.current.focus();
-          return;
-      }
       else if(useData?.phone.length===0){
           showToastMessageError("Số điện thoại không được để trống!");
           pRef.current.focus();
@@ -131,6 +126,11 @@ function Account() {
           passRef.current.focus();
           setUsePassword("");
           return;
+      }
+      if(useData?.email.length===0){
+        showToastMessageError("Email không được để trống!");
+        emailRef.current.focus();
+        return;
       }
     }
     if(!isActiveOtherInfo)
@@ -183,7 +183,7 @@ function Account() {
       }
       else if(useData?.shirtLength==="")  {
         showToastMessageError("Dài áo không được để trống!");
-        shirtLength.current.focus();
+        shirtLengthRef.current.focus();
         return;
       }
       else if(useData?.thighCircumference==="")  {
@@ -305,6 +305,16 @@ function Account() {
                       onChange={handleName}
                       ref={nRef}
                       ></input>
+            </div>
+            <div className="account-info-personal-information bottom">
+            <div className="width-30"><strong>Email:</strong></div>
+              <input  type="text"
+                      value={useData?.email}
+                      placeholder="Địa chỉ email"
+                      className="account-info-input width-60"
+                      ref={emailRef}
+                      onChange={(event) => {setUseData(useData=>({...useData,email:event.target.value}));setIsActiveInfo(false);}}
+              ></input>
             </div>
             <div className="account-info-personal-information bottom">
             <div className="width-30"><strong>Số điện thoại:</strong></div>
@@ -609,7 +619,7 @@ function Account() {
                 <button className="btn-cancel" hidden={isActiveOtherInfo} onClick={handleCancelOther}>
                   Hủy
                 </button>
-                <button className={isActiveOtherInfo? "btn-update-non-active" :"btn-update" } disabled={isActiveOtherInfo} onClick={handleSubmit}>
+                <button className={isActiveOtherInfo? "btn-update-non-active" :"btn-update" } disabled={isActiveOtherInfo || load} onClick={handleSubmit}>
                   Cập nhật
                 </button>
               </div>

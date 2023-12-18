@@ -97,6 +97,7 @@ function CreateAccount({ data }) {
       window.location.reload();
     })
     .catch((err)=>{
+      showToastMessageError("Tài khoản đã tồn tại trong hệ thống!");
       console.log(err);
     })
   };

@@ -9,24 +9,21 @@ const TaskCard = ({ item, index }) => {
   };
   const handleTime=(utcDateStr) => {
     let localDate = new Date(); // Ngày hiện tại ở múi giờ cục bộ
-    let utcDate = parse(utcDateStr, "yyyy-MM-dd'T'HH:mm:ss", new Date()); // Chuyển đổi ngày UTC từ chuỗi
-    if(utcDateStr.includes('.')) utcDate = parse(utcDateStr, "yyyy-MM-dd'T'HH:mm:ss.SSSSSS", new Date()); // Chuyển đổi ngày UTC từ chuỗi
+    let utcDate = parse(utcDateStr, "yyyy-MM-dd'T'HH:mm:ss", new Date());
+    if(utcDateStr.includes('.')) utcDate = parse(utcDateStr, "yyyy-MM-dd'T'HH:mm:ss.SSSSSS", new Date()); 
     const result=differenceInDays(utcDate, localDate);
     return result;
   };
   const handleTimeDone = (time1, time2) => {
   
-    // Parse the input strings into Date objects using the specified format
     let utcDateEnd = parse(time1, "yyyy-MM-dd'T'HH:mm:ss", new Date());
     let utcDateDone = parse(time2, "yyyy-MM-dd'T'HH:mm:ss", new Date());
-    if(time1.includes('.')) utcDateEnd = parse(time1, "yyyy-MM-dd'T'HH:mm:ss.SSSSSS", new Date()); // Chuyển đổi ngày UTC từ chuỗi
+    if(time1.includes('.')) utcDateEnd = parse(time1, "yyyy-MM-dd'T'HH:mm:ss.SSSSSS", new Date());
     if(time2.includes('.'))
     {
-      utcDateDone = parse(time2, "yyyy-MM-dd'T'HH:mm:ss.SSSSSS", new Date()); // Chuyển đổi ngày UTC từ chuỗi
+      utcDateDone = parse(time2, "yyyy-MM-dd'T'HH:mm:ss.SSSSSS", new Date());
     }
-    // Calculate the difference in days between the two dates
     const result = differenceInDays(utcDateEnd, utcDateDone);
-    // Return the calculated difference in days
     return result;
   };
   //text-1:remainingTimeLong >7 ngày
@@ -83,7 +80,7 @@ const TaskCard = ({ item, index }) => {
                   <div className="width-avatar">
                     <img
                     className="width-avatar"
-                    src={item.sample.images}
+                    src={item.product.images}
                     alt=""
                     />
                   </div>
@@ -175,7 +172,7 @@ const TaskCard = ({ item, index }) => {
                     <div className={`width-field font-size-12 ${(item.status!="done" && item.status!="complete")?status(handleTime(item.endTime)):item.status=="done"? status(handleTimeDone(item.endTime,item .doneDate),true):status(handleTimeDone(item.endTime,item .completeDate),true)}`}>
                       {
                         (item.status!="done" && item.status!="complete")?
-                        handleTime(item.endTime)>0?<span>(Thời gian còn lại: {handleTime(item.endTime)} ngày)</span>:
+                        handleTime(item.endTime)>=0?<span>(Thời gian còn lại: {handleTime(item.endTime)} ngày)</span>:
                         <span>(Đã quá hạn: {Math.abs(handleTime(item.endTime))} ngày)</span>
                         :item.status=="done"?<span>(Đã hoàn thành ngày {handleDate(item .doneDate)})</span>:<span>(Đã giao hàng ngày {handleDate(item.completeDate)})</span>
                       }

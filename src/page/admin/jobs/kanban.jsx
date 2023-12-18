@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import styled from '@emotion/styled';
 import { columnsFromBackend } from './KanbanData';
 import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 import TaskCard from './TaskCard';
 import { showToastMessageError,showToastMessageSuccess } from "../../../components/toast";
 import axios from "axios";
+import { v4 as uuidv4 } from 'uuid';
+import { parse, differenceInDays, format, parseISO } from "date-fns";
 
 
 //nếu time còn dưới 5 ngày là sắp tới hạn, và màu thì màu vàng
@@ -65,7 +67,49 @@ const Kanban = () => {
       return "complete";
     }
   };
-  const [columns, setColumns] = useState(columnsFromBackend);
+  const [columns, setColumns] = useState({});
+
+  useEffect(() => {
+    async function getData() {
+      try {
+        const userAuth = JSON.parse(localStorage.getItem('userAuth'));
+        const baseURL = import.meta.env.VITE_API_URL;
+        const yourConfig = {
+          headers: {
+            Authorization: 'Bearer ' + userAuth?.token,
+          },
+        };
+
+        const response = await axios.get(baseURL + `api/Task/GetTasks`, yourConfig);
+        const data = response.data;
+
+        const columnsFromBackend = {
+          [uuidv4()]: {
+            title: 'Chưa thực hiện',
+            items: data.filter((column) => column.status === 'todo'),
+          },
+          [uuidv4()]: {
+            title: 'Đang thực hiện',
+            items: data.filter((column) => column.status === 'doing'),
+          },
+          [uuidv4()]: {
+            title: 'Đã xong',
+            items: data.filter((column) => column.status === 'done'),
+          },
+          [uuidv4()]: {
+            title: 'Đã nhận',
+            items: data.filter((column) => column.status === 'complete'),
+          },
+        };
+
+        setColumns(columnsFromBackend);
+      } catch (error) {
+        console.error('error', error);
+      }
+    }
+
+    getData();
+  }, []); 
   const onDragEnd = async (result, columns, setColumns) => {
     if (!result.destination) return;
     const { source, destination } = result;
@@ -83,12 +127,8 @@ const Kanban = () => {
         "id": removed.id,
         "status": handleStatus(destColumn.title)
       }
-      await axios.put(`${baseURL}api/Task/UpdateStatusTask`,body,yourConfig)
+      axios.put(`${baseURL}api/Task/UpdateStatusTask`,body,yourConfig)
       .then((res)=>{
-        console.log(removed);
-        console.log(res.data);
-        removed.completeDate=res.data.completeDate;
-        removed.doneDate=res.data.doneDate;
         showToastMessageSuccess("Cập nhật trạng thái thành công!");
       })
       .catch((err)=>{
@@ -96,6 +136,15 @@ const Kanban = () => {
         showToastMessageError("Cập nhật trạng thái không thành công!");
         return;
       })
+      if(removed.status=="done")
+      {
+        removed.doneDate= format(new Date(), "yyyy-MM-dd'T'HH:mm:ss");
+        ;
+      }
+      else if(removed.status=="complete")
+      {
+        removed.completeDate= format(new Date(), "yyyy-MM-dd'T'HH:mm:ss");
+      }
       destItems.splice(destination.index, 0, removed);
       const listUpdate1=destItems.map((item, index) => ({
         id: item.id,
@@ -163,7 +212,9 @@ const Kanban = () => {
         setColumns(update);
       }
     }
+
   };
+  console.log(columns)
   return (
     <DragDropContext
       onDragEnd={(result) => onDragEnd(result, columns, setColumns)}

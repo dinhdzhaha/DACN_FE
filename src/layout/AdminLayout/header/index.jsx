@@ -12,6 +12,7 @@ import CreateInventory from "../../../components/createInventory";
 import CreateAccount from "../../../components/createAccount";
 import "../../../assets/style/admin/layout/header/header.scss";
 import CreateSample from "../../../components/createSample";
+import ReactHtmlParser from 'react-html-parser';
 
 function Header() {
   const {logout} = useContext(UserContext);
@@ -54,8 +55,19 @@ function Header() {
   const navigate = useNavigate();
   const userAuth= JSON.parse(localStorage.getItem("userAuth"));
   const [activeTab, setActiveTab] = useState(1);
+  const [count,setCount]=useState(0);
+  const [notifiesInit,setNotifiesInit] = useState([]);
+  const [notifies,setNotifies]= useState([]);
   const handleTabClick = (tabNumber) => {
     setActiveTab(tabNumber);
+    if(tabNumber===1)
+    {
+      setNotifies(notifiesInit);
+    }
+    else
+    {
+      setNotifies(notifiesInit.filter((item)=>item.isRead===false)); 
+    }
   };
   const [user,setUser]=useState({});
   const baseURL = import.meta.env.VITE_API_URL;
@@ -85,6 +97,20 @@ function Header() {
           navigate("/login");
         }
       });
+      axios.get(baseURL+`api/Notify/GetNotifys?userId=${userAuth.id}`,yourConfig).then((res) => {
+        setNotifiesInit(res.data);
+        if(activeTab===1)
+        {
+          setNotifies(res.data);
+        }
+        else
+        {
+          setNotifies(res.data.filter((item)=>item.isRead===false)); 
+        }
+        setCount(res.data.filter((item)=>item.isRead===false).length);
+      }).catch((err) => {
+      
+      });
     }
     else{
       logout();
@@ -98,6 +124,52 @@ function Header() {
     logout();
     navigate("/login");
   };
+  const handleTime=(time)=>{
+    const dateObject = new Date(time);
+    
+    // Convert to local format (hh:mm dd-mm-yyyy)
+    const localFormat = dateObject.toLocaleString('en-US', {
+      hour12: false,
+      hour: 'numeric',
+      minute: 'numeric',
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+    });
+    return localFormat;
+  }
+  const handleClick=(item)=>{
+    if(item.isRead===false)
+    {
+      const body={
+        "id": item.id
+      }
+      axios.put(baseURL+`api/Notify/UpdateReadeNotify`,body,yourConfig).then((res) => {
+        setNotifies(notifies.map((item2)=>{
+          if(item2.id===item.id)
+          {
+            item2.isRead=true;
+          }
+          return item2;
+        }));
+        setCount(count-1);
+      }).catch((err) => {
+        console.log(err);
+      });
+    }
+    if(userAuth.isAdmin)
+    {
+      if(currentPath.includes("/updateJob/"))
+      {
+        navigate(`/updateJob/${item.taskId}`);
+        window.location.reload(false);
+      }
+      else navigate(`/updateJob/${item.taskId}`);
+      
+    }
+    else
+      navigate("/cart");
+  }
   return (
     <div className="header-admin d-flex justify-content-between">
       <div className="header-admin-logo" onClick={()=>navigate("/admin")}>
@@ -152,7 +224,9 @@ function Header() {
               className="header-bell-change position-relative"
             >
               <img src={bell} alt="" className="header-nav-menu-img-bell" />
-              <span className="header-bell-number">1</span>
+              {count>0 &&
+              <span className="header-bell-number">{count}</span>
+              }
             </div>
           </Dropdown.Toggle>
           <Dropdown.Menu className="width-notification-admin">
@@ -177,46 +251,34 @@ function Header() {
                 Chưa đọc
               </div>
             </div>
-            <Dropdown.Item  className="bordered-item">
-              <div className="d-flex gap-3 notification-hover notification-not-active width-notification-content-admin">
+            {notifies.map((item,index)=>(
+            <Dropdown.Item  className="bordered-item" key={item.id} onClick={()=>handleClick(item)}>
+              <div className={item.isRead?"d-flex gap-3 notification-hover notification-not-active width-notification-content":"d-flex gap-3 notification-hover notification-active width-notification-content"}>
                 <div className="header-notification-avatars">
                   <img
-                    src="https://i.pinimg.com/564x/bc/77/95/bc77955563a66537bcfae105838e2c86.jpg"
+                    src={item?.linkProduct??user?.avatar}
                     className="header-notification-photo"
                     alt=""
                   />
                 </div>
-                <div className="header-notification-text text-white width-notification-content-text-admin">
+                <div className="header-notification-text text-white width-notification-content-text">
                   <p className="header-notification-text-top mb-1">
-                    Áo sơ mi đồng phục cấp 2 của bạn đã được nhận bởi
-                    bạn
+                  {ReactHtmlParser(item.content)}
                   </p>
                   <p className="header-notification-text-time mb-1">
-                    54 phút trước
+                    {
+                      handleTime(item.createdDate)
+                    }
                   </p>
                 </div>
               </div>
-            </Dropdown.Item>
+            </Dropdown.Item>))}
+            {notifies.length==0 &&
             <Dropdown.Item  className="bordered-item">
-              <div className="d-flex gap-3 notification-hover notification-active width-notification-content-admin">
-                <div className="header-notification-avatars">
-                  <img
-                    src="https://i.pinimg.com/564x/bc/77/95/bc77955563a66537bcfae105838e2c86.jpg"
-                    className="header-notification-photo"
-                    alt=""
-                  />
-                </div>
-                <div className="header-notification-text text-white width-notification-content-text-admin">
-                  <p className="header-notification-text-top mb-1">
-                    Áo sơ mi đồng phục cấp 2 của bạn đã được nhận bởi
-                    bạn
-                  </p>
-                  <p className="header-notification-text-time mb-1">
-                    54 phút trước
-                  </p>
-                </div>
+              <div className="d-flex gap-3 non-notify">
+                {activeTab==1?"Không có thông báo nào":"Không có thông báo chưa đọc"}
               </div>
-            </Dropdown.Item>
+            </Dropdown.Item>}
           </Dropdown.Menu>
         </Dropdown>
       </div>

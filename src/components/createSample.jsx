@@ -183,13 +183,21 @@ function CreateSample({ data }) {
                     <div className="width-label">
                       <strong className="text-dark width-label">Mô tả: </strong>{" "}
                     </div>
-                    <input
+                    <textarea
+                                placeholder="Nhập mô tả"
+                                value={description}
+                                onChange={(e) => setDescription(e.target.value)}
+                                className="sample-textarea"
+                                cols={80}
+                                rows={3}
+                                />
+                    {/* <input
                       type="number"
                       className="warehouse-model-input"
                       placeholder="Nhập mô tả"
                       value={description}
                       onChange={(e) => setDescription(e.target.value)}
-                    />
+                    /> */}
                   </div>
                 </li>
                 <li className="warehouse-model-item" >
@@ -197,13 +205,21 @@ function CreateSample({ data }) {
                     <div className="width-label">
                       <strong className="text-dark width-label"> Ghi chú: </strong>{" "}
                     </div>
-                    <input
+                    <textarea
+                                placeholder="Nhập ghi chú"
+                                value={note}
+                                onChange={(e) => setNote(e.target.value)}
+                                className="sample-textarea"
+                                cols={80}
+                                rows={3}
+                                />
+                    {/* <input
                       type="number"
                       className="warehouse-model-input"
                       placeholder="Nhập ghi chú"
                       value={note}
                       onChange={(e) => setNote(e.target.value)}
-                    />
+                    /> */}
                   </div>
                 </li>
                 <li className="warehouse-model-item" >

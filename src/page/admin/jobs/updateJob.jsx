@@ -676,6 +676,16 @@ function UpdateJob() {
                   Thông tin khách hàng
                 </h2>
               </div>
+              <div className="account-info-avatar-name">
+                <div className="account-info-avatar text-center">
+                  <img
+                    src={useData?.avatar}
+                    className="account-info-photo"
+                    alt=""
+                  />
+                  <div className="account-info-name">{useData?.firstName+" " + useData?.lastName}</div>
+                </div>
+              </div>
               <button className="btn-show" hidden={!isActiveInfo} onClick={handleHidden}>
                 Hiện thị thông tin Tài khoản
               </button>

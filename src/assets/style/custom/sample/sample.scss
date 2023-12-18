@@ -79,6 +79,11 @@
             width: 250px;
             height: 320px;
         }
+        &-detail{
+            border-radius: 10px;
+            width: 500px;
+            height: 520px;
+        }
         text-align: center;
     }
     &-name{
@@ -111,14 +116,15 @@
     font-size: 13px; /* Điều chỉnh kích thước văn bản */
     color: #333; /* Màu văn bản */
     position: absolute;
-    margin-left: 185px; 
-    margin-top: -8px;/* Đặt vị trí giữa theo chiều ngang */
+    margin-left: 230px; 
+    margin-top: -12px;/* Đặt vị trí giữa theo chiều ngang */
     transform: translate(-50%, -50%); /* Dịch vị trí để căn giữa */
     background-color: rgba(255, 255, 255, 0.4); /* Màu nền của văn bản */
     padding: 5px 6px; /* Khoảng cách giữa chữ và biểu tượng */
     border-radius: 5px; /* Làm tròn góc của nền */
     transition: opacity 0.3s, transform 0.3s; /* Hiệu ứng khi hover */
     z-index: 1000;
+    
 }
 
 .sample-product-icon:hover .like-text {
@@ -174,4 +180,143 @@ z-index: 1;
     -webkit-box-orient: vertical;
     height: 30px;
     margin-bottom: 5px;
+}
+
+.breadcrumb
+{
+    &-sample{
+    border-radius: 5px;
+    margin-left: 50px;
+    font-size: 17px;
+    font-weight: 700;
+    margin-top: -30px;
+    margin-bottom: 30px;
+    }
+    &-item{
+        &:hover{
+            background-color: rgb(255, 255, 255, 0.2);
+        }
+        padding: 8px;
+        border-radius: 8px;
+    }
+}
+.nameSample{
+    font-size: 25px;
+    font-weight: 700;
+    color: #000;
+    margin-bottom: 5px !important;
+    width: 70%;
+    text-align: start !important;
+    align-items: center !important;
+    align-content: center !important;
+    display: flex !important;
+}
+.sample-img-detail
+{
+    text-align: end!important;
+    margin-right: 30px !important;
+}
+.sample-price
+{
+    margin-left: 0px !important;
+    font-size: 20px;
+    color: #f2a10b;
+    margin-bottom: 5px !important;
+    &p{
+        margin-bottom: 0px !important;
+    }
+}
+.sample-note
+{
+    font-size: 20px;
+    color: #ffffff;
+    margin-bottom: 5px !important;
+    text-align: start !important;
+
+    &-title{
+        font-size: 20px;
+        color: #ffffff;
+        font-weight: 600;  
+        margin-bottom: 0px !important;  
+    }
+    &-text{
+        border-radius: 10px !important;
+        margin-left: 0px !important;
+        font-size: 17px !important;
+        font-weight: 400;
+    }
+}
+
+.sample-width-icon
+{
+    width: 50px !important;
+    height: 20px !important;
+}
+
+.icon-detail-sample{
+    width: 30% !important;
+    text-align: end!important;
+    margin-right: 30px !important;
+}
+.icon-icon{
+    margin-right: 10px !important;
+}
+.width-35
+{
+    width: 35% !important;
+}
+.width-50
+{
+    width: 50% !important;
+}
+
+.width-15
+{
+    width: 15% !important;
+}
+.sample-product-img1
+{
+    text-align: end!important;
+    &-detail1{
+        border-radius: 8px !important;
+        width: 80px !important;
+        height: 100px !important;
+        margin-bottom: 10px;
+        cursor: pointer;
+        transition: transform 0.3s ease; 
+        &:hover {
+            transform: scale(1.1);
+        }
+    }
+}
+.price{
+    &-price
+    {
+        font-size: 20px;
+        color: #f2a10b;
+        margin-bottom: 5px !important;
+        margin-top: 0px !important;
+    }
+    &-title
+    {
+        color: #ffffff;
+        font-size: 20px;
+        margin-right: 10px;
+        margin-bottom: 5px !important;
+        }
+}
+
+
+#like-index1 {
+    margin: 5px 10px 0;
+    color: red;
+    font-size: 24px;
+    transition: color 0.3s, transform 0.3s;
+    cursor: pointer;
+}
+
+#like-index1:hover {
+color: rgba(255, 255, 255, 0.8);
+transform: scale(1.1); /* Hiệu ứng phóng to khi hover */
+z-index: 1; 
 }

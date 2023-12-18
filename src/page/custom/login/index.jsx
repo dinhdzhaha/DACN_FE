@@ -48,7 +48,9 @@ function Login() {
         login(response.data);
         setLoad(false);
         showToastMessageSuccess("Đăng nhập thành công!");
-        navigate("/");
+        if (response.data.isAdmin) navigate("/admin");
+        else
+          navigate("/");
       })
       .catch((err) => {
         setPassword("");

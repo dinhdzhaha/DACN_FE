@@ -2,9 +2,11 @@ import React, { useState,useEffect } from 'react';
 import axios from 'axios';
 import "../../../assets/style/custom/sample/sample.scss"
 import Carousel from 'react-grid-carousel'
+import { useNavigate } from 'react-router-dom';
 
 function SampleProduct()
 {
+    const navigation = useNavigate();
     const userAuth = JSON.parse(localStorage.getItem("userAuth"));
     const baseURL = import.meta.env.VITE_API_URL;
     const [listSamples,setListSamples]=useState([]);
@@ -23,6 +25,23 @@ function SampleProduct()
         axios.get(baseURL+`api/ProductCategory/GetAllProductCategory`,yourConfig).then((res) => {
             setCategory(res.data);
             const productCategoryId= res.data[0].id;
+            if(userAuth===null) {
+                axios.get(baseURL+`api/Sample/GetSamples`,yourConfig).then((res) => {
+                    setListSamples(res.data);
+                    setListSampleProduct(res.data.filter((item)=>item.productCategoryId === productCategoryId && item.isMale==isShowLineMale).map((item, index) => ({
+                        id: item.id,
+                        productCategoryId: item.productCategoryId,
+                        img: item.images,
+                        name: item.name,
+                        price: item.price,
+                        isMale: item.isMale,
+                        like: false
+                    })));
+                    }).catch((err) => {
+                        console.log(err);
+                    });
+                return;
+            }
             axios.get(baseURL+`api/UserSample/GetUserSampleByUserQuery?userId=${userAuth.id}`,yourConfig).then((res) => {
                 listLike=res.data;
                 axios.get(baseURL+`api/Sample/GetSamples`,yourConfig).then((res) => {
@@ -103,6 +122,7 @@ function SampleProduct()
         ></span>
     )
     const handleIcon=(index)=>{
+        if(userAuth===null) return;
         const updatedList = [...listSampleProduct];
 
         // Cập nhật trạng thái "thích" của phần tử tại chỉ mục index
@@ -182,12 +202,13 @@ function SampleProduct()
                                         <i className="fas fa-heart heart-icon" id={`${item?.like ? "like-index" : ""}`} onClick={()=>{handleIcon(index)}}></i>
                                         <span className="like-text">{item.like?"Bỏ thích":"Thích"}</span>
                                     </div>                        
-                                    <div className='sample-product-img'>
+                                    <div className='sample-product-img'  onClick={()=>navigation(`/sample/${item.id}`)}>
                                         <img className='sample-product-img-img' src={item?.img} alt="sample-product-img"/>
                                     </div>                        
-                                    <div className='sample-product-name'>
-                                        <p className='two-line-ellipsis name-sample'>{item?.name}</p></div>                        
-                                    <div className='sample-product-information'>{item?.price.toLocaleString('vi-VN')} đ</div>                        
+                                    <div className='sample-product-name'  onClick={()=>navigation(`/sample/${item.id}`)}>
+                                        <p className='two-line-ellipsis name-sample'>{item?.name}</p>
+                                    </div>                        
+                                    <div className='sample-product-information'  onClick={()=>navigation(`/sample/${item.id}`)}>{item?.price.toLocaleString('vi-VN')} đ</div>                        
                                 </div>
                             </Carousel.Item>
                         ))

@@ -544,12 +544,32 @@ function UpdateJob() {
             (
               hidden?
               <div className="account-info margin-0 bottom">
+                <div className="account-info-avatar-name">
+                  <div className="text-end justify-content-start w-100 d-flex">
+                    <h2 className="account-other-information-measurements">
+                      Thông tin khách hàng
+                    </h2>
+                  </div>
+                  <div className="account-info-avatar text-center">
+                    <img
+                      src={useData?.avatar}
+                      className="account-info-photo"
+                      alt=""
+                    />
+                    <div className="account-info-name">{useData?.firstName+" " + useData?.lastName}</div>
+                  </div>
+                </div>
                 <button className="btn-show" hidden={!isActiveInfo} onClick={handleHidden}>
                   Hiện thị thông tin Tài khoản
                 </button>
               </div>
               :
               <div className="account-info margin-0 bottom">
+                <div className="text-end justify-content-start w-100 d-flex">
+                  <h2 className="account-other-information-measurements">
+                    Thông tin khách hàng
+                  </h2>
+                </div>
                 <div className="account-info-avatar-name">
                   <div className="account-info-avatar text-center">
                     <img
@@ -1043,7 +1063,7 @@ function UpdateJob() {
                   <button className="btn-cancel1" onClick={handleHiddenOther}>
                     Ẩn thông tin số đo cơ thể
                   </button>:
-                  <button className={isActiveOtherInfo? "btn-update-non-active" :"btn-update" } disabled={isActiveOtherInfo} onClick={handleSubmit}>
+                  <button className={isActiveOtherInfo? "btn-update-non-active" :"btn-update" } disabled={isActiveOtherInfo|| load} onClick={handleSubmit}>
                     Cập nhật
                   </button>
                 }

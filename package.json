@@ -29,6 +29,7 @@
     "react-dom": "^18.2.0",
     "react-dropzone": "^14.2.3",
     "react-grid-carousel": "^1.0.1",
+    "react-html-parser": "^2.0.2",
     "react-loading-icons": "^1.1.0",
     "react-modal": "^3.16.1",
     "react-photo-album": "^2.3.0",

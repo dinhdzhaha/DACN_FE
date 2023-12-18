@@ -144,23 +144,11 @@ function cart() {
     const date = new Date(time);
     return(format(date, 'yyyy-MM-dd'));
   }
-  const [task,setTask]=useState([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const rowsPerPage = 5;
 
-  const handlePageChange = (newPage) => {
-    setCurrentPage(newPage);
-  };
-
-  // Assuming 'task' is your array of tasks
-  const paginatedTasks = task.slice(
-    (currentPage - 1) * rowsPerPage,
-    currentPage * rowsPerPage
-  );
 
   return (
     <div className="cart">
-      <Table columns={columns} dataSource={data} rowClassName={(record, index) => 
+      <Table columns={columns} dataSource={data} pagination={{ pageSize: 5 }} rowClassName={(record, index) => 
         {
           if(record.tag=="todo" || record.tag=="done" || record.tag=="doing")
             return (index % 2 === 0 ? 'even-row' : 'odd-row')

@@ -73,7 +73,6 @@
     top: -11px;
     right: -16px;
     color: #fff;
-    font-family: "Roboto", sans-serif;
     font-size: 13px;
     font-style: normal;
     font-weight: 400;
@@ -116,7 +115,10 @@
 }
 .width-notification-admin
 {
-  width:450px !important  ;
+  width:480px !important  ;
+  max-height: 550px; /* Adjust the height as needed */
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 .width-notification-content-text-admin
 {

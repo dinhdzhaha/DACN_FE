@@ -162,11 +162,9 @@
 
 .notification-active {
   color: #fff;
-  font-weight: 800;
 }
 .notification-active-time {
   color: #0079e9;
-  font-weight: 800;
 }
 span.header-bell-number {
   position: absolute;
@@ -223,12 +221,15 @@ span.header-bell-number {
 }
 
 .width-notification{
-  width: 400px !important;
+  width: 500px !important;
+  max-height: 550px; /* Adjust the height as needed */
+  overflow-y: auto;
+  overflow-x: hidden;
   &-content
   {
-    width: 380px !important;
+    width: 480px !important;
     &-text{
-      width: 280px !important;
+      width: 380px !important;
       p{
         white-space: normal !important;
       }
@@ -248,4 +249,30 @@ span.header-bell-number {
 }
 .login-hover:hover{
   background-color: rgb(247, 200, 224, 0.6);
+}
+.non-notify
+{
+  color: #fff;
+  font-family: "Rubik", sans-serif;
+  font-size: 18px;
+  font-style: normal;
+  line-height: normal;
+  border-radius: 10px;
+  padding: 6px 8px 6px 8px;
+  
+}
+.expire
+{
+  color: #c3c91a;
+  font-size: 18px;
+  font-style: normal;
+  line-height: normal;
+}
+
+.deadline
+{
+  color: #ff0000;
+  font-size: 18px;
+  font-style: normal;
+  line-height: normal;
 }
